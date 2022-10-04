@@ -11,10 +11,10 @@ class Cell(private val imageView: ImageView, textId: String) {
     val img
         get() = imageView
 
-    val row = textId[0] - 'a'
-    val column = textId[1] - '1'
-    val color = CellColor.values()[((row + column) % 2)]
-    var isSelected = false
+    private val row = textId[0] - 'a'
+    private val column = textId[1] - '1'
+    private val color = if ((row + column) % 2 == 0) CellColor.BLACK else CellColor.WHITE
+    private var isSelected = false
 
     fun toggleSelection() {
         img.setBackgroundColor(if(isSelected) color.mainColor else color.selectionColor)

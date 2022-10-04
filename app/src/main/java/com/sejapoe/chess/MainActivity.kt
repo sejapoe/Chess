@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val cells = MutableList<MutableList<Cell>>(8) {
+        val cells = MutableList(8) {
             val row = mutableListOf<Cell>()
             for (i in 1..8) {
                 val textId = "${'a' + it}$i"
