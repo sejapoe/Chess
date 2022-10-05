@@ -24,9 +24,8 @@ class MainActivity : AppCompatActivity() {
 
         for (cell in board.cells.flatten()) {
             cell.setOnClickListener {
-                if (it.piece != null) {
-                    it.toggleSelection()
-                    it.selectAvailablePositions(board)
+                if(!board.tryMoveSelectedTo(it) && it.piece != null) {
+                    board.selectedCell = it
                 }
             }
         }

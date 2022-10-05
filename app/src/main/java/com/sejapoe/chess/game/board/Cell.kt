@@ -16,7 +16,7 @@ class Cell(private val imageView: ImageView, textId: String) {
     val column = textId[0] - 'a'
     val row = textId[1] - '1'
     private val color = if ((row + column) % 2 == 0) CellColor.BLACK else CellColor.WHITE
-    private var isSelected = false
+    var isSelected = false
         set(value) {
             img.setBackgroundColor(if (value) color.selectionColor else color.mainColor)
             field = value
@@ -55,7 +55,7 @@ class Cell(private val imageView: ImageView, textId: String) {
     private fun canMoveTo(other: Cell): Boolean {
         // TODO: Check king
         // TODO: Add attack for pawn. Check target is not ally
-        return piece != null && piece!!.canMoveTo(row, column, other.row, other.column)
+        return piece != null && (other.piece == null || other.piece!!.getColor() != piece!!.getColor()) && piece!!.canMoveTo(row, column, other.row, other.column)
     }
 
     fun setOnClickListener(listener: OnClickListener) {

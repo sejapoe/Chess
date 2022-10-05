@@ -5,6 +5,16 @@ import com.sejapoe.chess.game.pieces.*
 class Board(private val _cells: MutableList<MutableList<Cell>>) {
     val cells
         get() = _cells
+    var selectedCell: Cell? = null
+        set(value) {
+            if (value != null) {
+                value.toggleSelection()
+                value.selectAvailablePositions(this)
+            } else {
+                resetSelection()
+            }
+            field = value
+        }
 
     init {
 
@@ -15,6 +25,23 @@ class Board(private val _cells: MutableList<MutableList<Cell>>) {
             row.forEachIndexed { j, cell ->
                 cell.piece = defaultSetup[i][j]
             }
+        }
+    }
+
+    fun tryMoveSelectedTo(cell: Cell): Boolean {
+        if(selectedCell == null) return false
+        if (cell.piece != null && cell.piece!!.getColor() == selectedCell!!.piece!!.getColor()) return false // todo: attack
+        if (cell.isSelected) {
+            cell.piece = selectedCell!!.piece
+            selectedCell!!.piece = null
+        }
+        selectedCell = null
+        return true
+    }
+
+    fun resetSelection() {
+        forEach {
+            it.isSelected = false
         }
     }
 
