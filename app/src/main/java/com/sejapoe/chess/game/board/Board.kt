@@ -4,6 +4,7 @@ import android.app.Activity
 import com.sejapoe.chess.game.pieces.*
 
 class Board(activity: Activity) {
+    // Initialize cells, assign for each cell it's imageView
     private val cells: MutableList<MutableList<Cell>> = MutableList(8) {
         MutableList(8) {jt ->
             val textId = "${'a' + jt}${it + 1}"
@@ -22,6 +23,7 @@ class Board(activity: Activity) {
             field = value
         }
 
+    // Add interaction logic
     init {
         for (cell in cells.flatten()) {
             cell.setOnClickListener {
@@ -32,7 +34,9 @@ class Board(activity: Activity) {
         }
     }
 
+    // Set all cells to initial state
     fun resetSetup() {
+        resetSelection()
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
                 cell.piece = defaultSetup[i][j]
@@ -41,7 +45,7 @@ class Board(activity: Activity) {
     }
 
     private fun tryMoveSelectedTo(cell: Cell): Boolean {
-        if(selectedCell == null) return false
+        if (selectedCell == null) return false
         if (cell.piece != null && cell.piece!!.getColor() == selectedCell!!.piece!!.getColor()) return false // todo: attack
         if (cell.isSelected) {
             cell.piece = selectedCell!!.piece
@@ -66,6 +70,7 @@ class Board(activity: Activity) {
     }
 
     companion object {
+        // initial state of chessboard
         val defaultSetup = mutableListOf(
             mutableListOf(Rook(PieceColor.BLACK), Knight(PieceColor.BLACK), Bishop(PieceColor.BLACK), Queen(PieceColor.BLACK), King(PieceColor.BLACK), Bishop(PieceColor.BLACK), Knight(PieceColor.BLACK), Rook(PieceColor.BLACK)),
             MutableList(8) { Pawn(PieceColor.BLACK, 6) },
