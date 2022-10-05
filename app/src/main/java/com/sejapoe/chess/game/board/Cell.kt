@@ -1,10 +1,12 @@
-package com.sejapoe.chess.game
+package com.sejapoe.chess.game.board
 
 import android.widget.ImageView
+import com.sejapoe.chess.R
+import com.sejapoe.chess.game.pieces.Piece
 
 enum class CellColor(val mainColor: Int, val selectionColor: Int) {
-    BLACK(0xFF000000.toInt(), 0xFF7E4A00.toInt()),
-    WHITE(0xFFFFFFFF.toInt(), 0xFFFF9805.toInt())
+    BLACK(0xFFD18B47.toInt(), 0xFF855425.toInt()),
+    WHITE(0xFFF1A963.toInt(), 0xFFA87D53.toInt());
 }
 
 class Cell(private val imageView: ImageView, textId: String) {
@@ -15,6 +17,21 @@ class Cell(private val imageView: ImageView, textId: String) {
     private val column = textId[1] - '1'
     private val color = if ((row + column) % 2 == 0) CellColor.BLACK else CellColor.WHITE
     private var isSelected = false
+    var piece: Piece? = null
+        set(value) {
+            when (value) {
+                null -> img.setImageResource(R.drawable.cell)
+                else -> {
+                    img.setImageResource(value.getImageResource())
+                    img.setColorFilter(value.getColor().toInt())
+                }
+            }
+            field = value
+        }
+
+    init {
+        img.setBackgroundColor(color.mainColor)
+    }
 
     fun toggleSelection() {
         img.setBackgroundColor(if(isSelected) color.mainColor else color.selectionColor)

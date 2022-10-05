@@ -26,8 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/b8"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -42,8 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/d8"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -58,8 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/f8"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -74,8 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/h8"
                     android:contentDescription="@string/none"/>
         </TableRow>
@@ -86,8 +82,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/a7"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -102,8 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/c7"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -118,8 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/e7"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -134,8 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/g7"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -162,8 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/b6"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -178,8 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/d6"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -194,8 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/f6"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -210,8 +199,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/h6"
                     android:contentDescription="@string/none"/>
         </TableRow>
@@ -222,8 +210,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/a5"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -238,8 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/c5"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -254,8 +240,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/e5"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -270,8 +255,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/g5"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -298,8 +282,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/b4"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -314,8 +297,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/d4"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -330,8 +312,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/f4"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -346,8 +327,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/h4"
                     android:contentDescription="@string/none"/>
         </TableRow>
@@ -358,8 +338,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/a3"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -374,8 +353,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/c3"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -390,8 +368,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/e3"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -406,8 +383,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/g3"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -434,8 +410,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/b2"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -450,8 +425,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/d2"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -466,8 +440,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/f2"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -482,8 +455,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/h2"
                     android:contentDescription="@string/none"/>
         </TableRow>
@@ -494,8 +466,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/a1"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -510,8 +481,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/c1"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -526,8 +496,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/e1"
                     android:contentDescription="@string/none"/>
             <ImageView
@@ -542,8 +511,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/cell"
-                    android:tag="black"
-                    android:background="#000000"
+                    
                     android:id="@+id/g1"
                     android:contentDescription="@string/none"/>
             <ImageView
