@@ -10,6 +10,6 @@ enum class PieceColor(private val color: Int) {
 
 sealed interface Piece {
     fun getColor() : PieceColor
-    fun getMovementRules()
+    fun canMoveTo(r1: Int, c1: Int, r2: Int, c2: Int): Boolean
     fun getImageResource(): Int
 }

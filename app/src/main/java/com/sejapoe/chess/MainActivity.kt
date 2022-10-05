@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
 
         val board = Board(MutableList(8) {
             val row = mutableListOf<Cell>()
-            for (i in 1..8) {
-                val textId = "${'a' + it}$i"
+            for (i in 0..7) {
+                val textId = "${'a' + i}${it + 1}"
                 val id = resources.getIdentifier(textId, "id", packageName)
                 val cell = findViewById<ImageView>(id)
                 row.add(Cell(cell, textId))
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             cell.setOnClickListener {
                 if (it.piece != null) {
                     it.toggleSelection()
+                    it.selectAvailablePositions(board)
                 }
             }
         }

@@ -13,10 +13,14 @@ class Cell(private val imageView: ImageView, textId: String) {
     val img
         get() = imageView
 
-    private val row = textId[0] - 'a'
-    private val column = textId[1] - '1'
+    val column = textId[0] - 'a'
+    val row = textId[1] - '1'
     private val color = if ((row + column) % 2 == 0) CellColor.BLACK else CellColor.WHITE
     private var isSelected = false
+        set(value) {
+            img.setBackgroundColor(if (value) color.selectionColor else color.mainColor)
+            field = value
+        }
     var piece: Piece? = null
         set(value) {
             when (value) {
@@ -34,8 +38,24 @@ class Cell(private val imageView: ImageView, textId: String) {
     }
 
     fun toggleSelection() {
-        img.setBackgroundColor(if(isSelected) color.mainColor else color.selectionColor)
         isSelected = !isSelected
+    }
+
+    fun selectAvailablePositions(board: Board) {
+        board.forEach{
+            if (it === this) return@forEach
+            if (canMoveTo(it)) {
+                it.isSelected = isSelected
+            } else {
+                it.isSelected = false
+            }
+        }
+    }
+
+    private fun canMoveTo(other: Cell): Boolean {
+        // TODO: Check king
+        // TODO: Add attack for pawn. Check target is not ally
+        return piece != null && piece!!.canMoveTo(row, column, other.row, other.column)
     }
 
     fun setOnClickListener(listener: OnClickListener) {
