@@ -42,7 +42,7 @@ class Cell(private val imageView: ImageView, textId: String) {
     }
 
     fun selectAvailablePositions(board: Board) {
-        board.forEach{
+        board.forEach {
             if (it === this) return@forEach
             if (canMoveTo(it)) {
                 it.isSelected = isSelected
@@ -55,7 +55,12 @@ class Cell(private val imageView: ImageView, textId: String) {
     private fun canMoveTo(other: Cell): Boolean {
         // TODO: Check king
         // TODO: Add attack for pawn. Check target is not ally
-        return piece != null && (other.piece == null || other.piece!!.getColor() != piece!!.getColor()) && piece!!.canMoveTo(row, column, other.row, other.column)
+        return piece != null && (other.piece == null || other.piece!!.getColor() != piece!!.getColor()) && piece!!.canMoveTo(
+            row,
+            column,
+            other.row,
+            other.column
+        )
     }
 
     fun setOnClickListener(listener: OnClickListener) {

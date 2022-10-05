@@ -6,7 +6,7 @@ import com.sejapoe.chess.game.pieces.*
 class Board(activity: Activity) {
     // Initialize cells, assign for each cell it's imageView
     private val cells: MutableList<MutableList<Cell>> = MutableList(8) {
-        MutableList(8) {jt ->
+        MutableList(8) { jt ->
             val textId = "${'a' + jt}${it + 1}"
             val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
             Cell(activity.findViewById(id), textId)
@@ -27,7 +27,7 @@ class Board(activity: Activity) {
     init {
         for (cell in cells.flatten()) {
             cell.setOnClickListener {
-                if(!tryMoveSelectedTo(it) && it.piece != null) {
+                if (!tryMoveSelectedTo(it) && it.piece != null) {
                     selectedCell = it
                 }
             }
@@ -72,14 +72,32 @@ class Board(activity: Activity) {
     companion object {
         // initial state of chessboard
         val defaultSetup = mutableListOf(
-            mutableListOf(Rook(PieceColor.BLACK), Knight(PieceColor.BLACK), Bishop(PieceColor.BLACK), Queen(PieceColor.BLACK), King(PieceColor.BLACK), Bishop(PieceColor.BLACK), Knight(PieceColor.BLACK), Rook(PieceColor.BLACK)),
+            mutableListOf(
+                Rook(PieceColor.BLACK),
+                Knight(PieceColor.BLACK),
+                Bishop(PieceColor.BLACK),
+                Queen(PieceColor.BLACK),
+                King(PieceColor.BLACK),
+                Bishop(PieceColor.BLACK),
+                Knight(PieceColor.BLACK),
+                Rook(PieceColor.BLACK)
+            ),
             MutableList(8) { Pawn(PieceColor.BLACK, 6) },
             MutableList(8) { null },
             MutableList(8) { null },
             MutableList(8) { null },
             MutableList(8) { null },
             MutableList(8) { Pawn(PieceColor.WHITE, 1) },
-            mutableListOf(Rook(PieceColor.WHITE), Knight(PieceColor.WHITE), Bishop(PieceColor.WHITE), Queen(PieceColor.WHITE), King(PieceColor.WHITE), Bishop(PieceColor.WHITE), Knight(PieceColor.WHITE), Rook(PieceColor.WHITE)),
-            ).reversed()
+            mutableListOf(
+                Rook(PieceColor.WHITE),
+                Knight(PieceColor.WHITE),
+                Bishop(PieceColor.WHITE),
+                Queen(PieceColor.WHITE),
+                King(PieceColor.WHITE),
+                Bishop(PieceColor.WHITE),
+                Knight(PieceColor.WHITE),
+                Rook(PieceColor.WHITE)
+            ),
+        ).reversed()
     }
 }
