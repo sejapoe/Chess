@@ -42,25 +42,28 @@ class Cell(private val imageView: ImageView, textId: String) {
     }
 
     fun selectAvailablePositions(board: Board) {
-        board.forEach {
-            if (it === this) return@forEach
-            if (canMoveTo(it)) {
-                it.isSelected = isSelected
-            } else {
-                it.isSelected = false
+        val candidates = this.piece!!.getCandidateCells(this.row, this.column, board)
+        candidates.forEach {
+            val cell = board.cells[it.first][it.second]
+            if (canMoveTo(cell)) {
+                cell.isSelected = isSelected
             }
         }
+//        board.forEach {
+//            if (candidates.any{ coords -> coords.first == it.row && coords.second == it.column }) return@forEach
+////            if (it === this) return@forEach
+//            if (canMoveTo(it)) {
+//                it.isSelected = isSelected
+//            } else {
+//                it.isSelected = false
+//            }
+//        }
     }
 
     private fun canMoveTo(other: Cell): Boolean {
         // TODO: Check king
         // TODO: Add attack for pawn. Check target is not ally
-        return piece != null && (other.piece == null || other.piece!!.getColor() != piece!!.getColor()) && piece!!.canMoveTo(
-            row,
-            column,
-            other.row,
-            other.column
-        )
+        return piece != null && (other.piece == null || other.piece!!.getColor() != piece!!.getColor())
     }
 
     fun setOnClickListener(listener: OnClickListener) {

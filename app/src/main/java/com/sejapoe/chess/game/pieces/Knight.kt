@@ -1,12 +1,26 @@
 package com.sejapoe.chess.game.pieces
 
 import com.sejapoe.chess.R
-import kotlin.math.abs
+import com.sejapoe.chess.game.board.Board
 
 class Knight(private val _color: PieceColor) : Piece {
     override fun getColor(): PieceColor = _color
 
-    override fun canMoveTo(r1: Int, c1: Int, r2: Int, c2: Int) = setOf(abs(r1 - r2), abs(c1 - c2)) == setOf(1, 2)
+    override fun getCandidateCells(r: Int, c: Int, board: Board): MutableList<Pair<Int, Int>> {
+        val list: MutableList<Pair<Int, Int>> = mutableListOf()
+        for (i in -1..1 step 2) {
+            for (j in -1..1 step 2) {
+                val rDest1 = r + i
+                val cDest1 = c + j * 2
+                if (rDest1 in 0..7 && cDest1 in 0..7) list += rDest1 to cDest1
+
+                val rDest2 = r + i * 2
+                val cDest2 = c + j
+                if (rDest2 in 0..7 && cDest2 in 0..7) list += rDest2 to cDest2
+            }
+        }
+        return list
+    }
 
     override fun getImageResource() = R.drawable.knight
 }

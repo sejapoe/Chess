@@ -1,11 +1,19 @@
 package com.sejapoe.chess.game.pieces
 
 import com.sejapoe.chess.R
+import com.sejapoe.chess.game.board.Board
 
-class Rook(private val _color: PieceColor) : Piece {
+class Rook(private val _color: PieceColor) : FarReachingPiece {
     override fun getColor(): PieceColor = _color
 
-    override fun canMoveTo(r1: Int, c1: Int, r2: Int, c2: Int): Boolean = r1 == r2 || c1 == c2
+    override fun getCandidateCells(r: Int, c: Int, board: Board): MutableList<Pair<Int, Int>> {
+        val allowedDirections: MutableSet<Pair<Int, Int>> = mutableSetOf()
+        for (i in -1..1 step 2) {
+            allowedDirections += i to 0
+            allowedDirections += 0 to i
+        }
+        return super.getCandidateCells(r, c, board, allowedDirections)
+    }
 
     override fun getImageResource() = R.drawable.rook
 }

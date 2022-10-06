@@ -5,7 +5,7 @@ import com.sejapoe.chess.game.pieces.*
 
 class Board(activity: Activity) {
     // Initialize cells, assign for each cell it's imageView
-    private val cells: MutableList<MutableList<Cell>> = MutableList(8) {
+    val cells: MutableList<MutableList<Cell>> = MutableList(8) {
         MutableList(8) { jt ->
             val textId = "${'a' + jt}${it + 1}"
             val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
@@ -14,11 +14,10 @@ class Board(activity: Activity) {
     }
     private var selectedCell: Cell? = null
         set(value) {
+            resetSelection()
             if (value != null) {
                 value.toggleSelection()
                 value.selectAvailablePositions(this)
-            } else {
-                resetSelection()
             }
             field = value
         }

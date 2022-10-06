@@ -1,6 +1,7 @@
 package com.sejapoe.chess.game.pieces
 
 import android.graphics.Color
+import com.sejapoe.chess.game.board.Board
 
 enum class PieceColor(private val color: Int) {
     BLACK(Color.BLACK), WHITE(Color.WHITE);
@@ -10,6 +11,6 @@ enum class PieceColor(private val color: Int) {
 
 sealed interface Piece {
     fun getColor(): PieceColor
-    fun canMoveTo(r1: Int, c1: Int, r2: Int, c2: Int): Boolean
+    fun getCandidateCells(r: Int, c: Int, board: Board): MutableList<Pair<Int, Int>>
     fun getImageResource(): Int
 }
