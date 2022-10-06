@@ -49,15 +49,6 @@ class Cell(private val imageView: ImageView, textId: String) {
                 cell.isSelected = isSelected
             }
         }
-//        board.forEach {
-//            if (candidates.any{ coords -> coords.first == it.row && coords.second == it.column }) return@forEach
-////            if (it === this) return@forEach
-//            if (canMoveTo(it)) {
-//                it.isSelected = isSelected
-//            } else {
-//                it.isSelected = false
-//            }
-//        }
     }
 
     private fun canMoveTo(other: Cell): Boolean {
