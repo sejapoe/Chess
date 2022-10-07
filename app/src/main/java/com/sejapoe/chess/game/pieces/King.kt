@@ -1,6 +1,8 @@
 package com.sejapoe.chess.game.pieces
 
 import com.sejapoe.chess.R
+import com.sejapoe.chess.game.CellState
+import com.sejapoe.chess.game.PieceColor
 import com.sejapoe.chess.game.board.Board
 
 class King(private val _color: PieceColor) : Piece, CastingParticipant {
@@ -8,14 +10,13 @@ class King(private val _color: PieceColor) : Piece, CastingParticipant {
 
     override fun getColor() = _color
 
-    override fun getCandidateCells(r: Int, c: Int, board: Board): MutableList<MovementDescription> {
-        val list: MutableList<MovementDescription> = mutableListOf()
+    override fun selectAvailableCells(r: Int, c: Int, board: Board) {
         for (i in -1..1) {
             for (j in -1..1) {
                 if (i == 0 && j == 0) continue
                 val rDest = r + i
                 val cDest = c + j
-                if (rDest in 0..7 && cDest in 0..7) list += MovementDescription(rDest, cDest)
+                if (rDest in 0..7 && cDest in 0..7) board.cells[rDest][cDest].setCellState(CellState.MOVE)
             }
         }
         if (c == 4 && !wasMoved) {
@@ -26,7 +27,7 @@ class King(private val _color: PieceColor) : Piece, CastingParticipant {
                 board.cells[r][0].piece is Rook &&
                 !(board.cells[r][0].piece as Rook).wasMoved
             )
-                list += MovementDescription(r, c - 3, MovementAttribute.CAST)
+                board.cells[r][c - 3].setCellState(CellState.CAST)
             if (
                 (1..2).all {
                     board.cells[r][it + c].piece == null
@@ -34,9 +35,8 @@ class King(private val _color: PieceColor) : Piece, CastingParticipant {
                 board.cells[r][7].piece is Rook &&
                 !(board.cells[r][7].piece as Rook).wasMoved
             )
-                list += MovementDescription(r, c + 2, MovementAttribute.CAST)
+                board.cells[r][c + 2].setCellState(CellState.CAST)
         }
-        return list
     }
 
     override fun getImageResource() = R.drawable.king

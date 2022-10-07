@@ -1,6 +1,8 @@
 package com.sejapoe.chess.game.board
 
 import android.app.Activity
+import com.sejapoe.chess.game.CellState
+import com.sejapoe.chess.game.PieceColor
 import com.sejapoe.chess.game.pieces.*
 
 class Board(activity: Activity) {
@@ -16,12 +18,11 @@ class Board(activity: Activity) {
         set(value) {
             resetSelection()
             if (value != null) {
-                value.toggleSelection()
-                value.selectAvailablePositions(this)
+                value.state = CellState.STAY
+                value.piece!!.selectAvailableCells(value.row, value.column, this)
             }
             field = value
         }
-    val movementCandidates: MutableList<MovementDescription> = mutableListOf()
 
     // Add interaction logic
     init {
@@ -49,14 +50,11 @@ class Board(activity: Activity) {
 
         if (destinationCell.piece != null && destinationCell.piece!!.getColor() == fixedSelectedCell.piece!!.getColor()) return false // todo: attack
 
-        val movementDescription =
-            movementCandidates.find { it.row == destinationCell.row && it.column == destinationCell.column }
-        if (movementDescription != null) {
-            when (movementDescription.attribute) {
-                MovementAttribute.MOVE -> move(fixedSelectedCell, destinationCell)
-                MovementAttribute.ATTACK -> TODO()
-                MovementAttribute.CAST -> cast(fixedSelectedCell, destinationCell)
-            }
+        when (destinationCell.state) {
+            CellState.MOVE -> move(fixedSelectedCell, destinationCell)
+            CellState.ATTACK -> TODO()
+            CellState.CAST -> cast(fixedSelectedCell, destinationCell)
+            else -> {}
         }
         selectedCell = null
         return true
@@ -90,9 +88,8 @@ class Board(activity: Activity) {
     }
 
     private fun resetSelection() {
-        movementCandidates.clear()
         forEach {
-            it.isSelected = false
+            it.state = CellState.NONE
         }
     }
 
@@ -117,7 +114,7 @@ class Board(activity: Activity) {
                     else -> null
                 }
 
-                1, 6 -> Pawn(color, c)
+                1, 6 -> Pawn(color, r)
                 else -> null
             }
         }

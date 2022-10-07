@@ -1,5 +1,6 @@
 package com.sejapoe.chess.game.pieces
 
+import com.sejapoe.chess.game.CellState
 import com.sejapoe.chess.game.board.Board
 interface FarReachingPiece : Piece {
     fun getCandidateCells(
@@ -7,9 +8,8 @@ interface FarReachingPiece : Piece {
         c: Int,
         board: Board,
         directions: Set<Pair<Int, Int>>
-    ): MutableList<MovementDescription> {
+    ) {
         val allowedDirections = directions.toHashSet()
-        val list: MutableList<MovementDescription> = mutableListOf()
         for (i in 1..7) {
             for (dir in directions) {
                 if (allowedDirections.contains(dir)) {
@@ -22,10 +22,9 @@ interface FarReachingPiece : Piece {
                     if (board.cells[rDest][cDest].piece != null) {
                         allowedDirections.remove(dir)
                     }
-                    list += MovementDescription(rDest, cDest)
+                    board.cells[rDest][cDest].setCellState(CellState.MOVE)
                 }
             }
         }
-        return list
     }
 }
