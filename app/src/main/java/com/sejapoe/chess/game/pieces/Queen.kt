@@ -6,7 +6,7 @@ import com.sejapoe.chess.game.board.Board
 class Queen(private val _color: PieceColor) : FarReachingPiece {
     override fun getColor(): PieceColor = _color
 
-    override fun getCandidateCells(r: Int, c: Int, board: Board): MutableList<Pair<Int, Int>> {
+    override fun getCandidateCells(r: Int, c: Int, board: Board): MutableList<MovementDescription> {
         val allowedDirections: MutableSet<Pair<Int, Int>> = mutableSetOf()
         for (i in -1..1) {
             for (j in -1..1) {

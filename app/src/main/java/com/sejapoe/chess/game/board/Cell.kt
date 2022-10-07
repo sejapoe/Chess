@@ -44,9 +44,10 @@ class Cell(private val imageView: ImageView, textId: String) {
     fun selectAvailablePositions(board: Board) {
         val candidates = this.piece!!.getCandidateCells(this.row, this.column, board)
         candidates.forEach {
-            val cell = board.cells[it.first][it.second]
+            val cell = board.cells[it.row][it.column]
             if (canMoveTo(cell)) {
                 cell.isSelected = isSelected
+                board.movementCandidates += it
             }
         }
     }

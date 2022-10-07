@@ -21,6 +21,7 @@ class Board(activity: Activity) {
             }
             field = value
         }
+    val movementCandidates: MutableList<MovementDescription> = mutableListOf()
 
     // Add interaction logic
     init {
@@ -43,25 +44,54 @@ class Board(activity: Activity) {
         }
     }
 
-    private fun tryMoveSelectedTo(cell: Cell): Boolean {
+    private fun tryMoveSelectedTo(destinationCell: Cell): Boolean {
         if (selectedCell == null) return false
         val fixedSelectedCell = selectedCell!!
-        if (cell.piece != null && cell.piece!!.getColor() == fixedSelectedCell.piece!!.getColor()) return false // todo: attack
-        if (cell.isSelected) {
-            if (fixedSelectedCell.piece is Pawn &&
-                cell.row == if (fixedSelectedCell.piece!!.getColor() == PieceColor.WHITE) 7 else 0
-            ) {
-                cell.piece = Queen(fixedSelectedCell.piece!!.getColor()) // todo: select0
-            } else {
-                cell.piece = fixedSelectedCell.piece
+
+        if (destinationCell.piece != null && destinationCell.piece!!.getColor() == fixedSelectedCell.piece!!.getColor()) return false // todo: attack
+
+        val movementDescription =
+            movementCandidates.find { it.row == destinationCell.row && it.column == destinationCell.column }
+        if (movementDescription != null) {
+            when (movementDescription.attribute) {
+                MovementAttribute.MOVE -> move(fixedSelectedCell, destinationCell)
+                MovementAttribute.ATTACK -> TODO()
+                MovementAttribute.CAST -> cast(fixedSelectedCell, destinationCell)
             }
-            fixedSelectedCell.piece = null
         }
         selectedCell = null
         return true
     }
 
+    private fun cast(kingCell: Cell, destinationCell: Cell) {
+        val delta = if (kingCell.column > destinationCell.column) 1 else -1
+        move(kingCell, destinationCell)
+        move(
+            cells[destinationCell.row][destinationCell.column - delta],
+            cells[destinationCell.row][destinationCell.column + delta]
+        )
+    }
+
+    private fun move(sourceCell: Cell, destinationCell: Cell) {
+        when (sourceCell.piece) {
+            is CastingParticipant -> {
+                (sourceCell.piece as CastingParticipant).wasMoved = true
+                destinationCell.piece = sourceCell.piece
+            }
+
+            is Pawn -> if (destinationCell.row == if (sourceCell.piece!!.getColor() == PieceColor.WHITE) 7 else 0) {
+                destinationCell.piece = Queen(sourceCell.piece!!.getColor())
+            } else {
+                destinationCell.piece = sourceCell.piece
+            }
+
+            else -> destinationCell.piece = sourceCell.piece
+        }
+        sourceCell.piece = null
+    }
+
     private fun resetSelection() {
+        movementCandidates.clear()
         forEach {
             it.isSelected = false
         }
