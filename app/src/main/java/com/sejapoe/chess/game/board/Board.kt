@@ -6,14 +6,15 @@ import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.piece.*
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
+import com.sejapoe.chess.game.theme.Theme
 
-class Board(activity: Activity) {
+class Board(activity: Activity, val theme: Theme) {
     // Initialize cells, assign for each cell it's imageView
     val cells: MutableList<MutableList<Cell>> = MutableList(8) {
         MutableList(8) { jt ->
             val textId = "${'a' + jt}${it + 1}"
             val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
-            Cell(activity.findViewById(id), textId)
+            Cell(activity.findViewById(id), theme, textId)
         }
     }
     private var selectedCell: Cell? = null
@@ -44,7 +45,7 @@ class Board(activity: Activity) {
         selectedCell = null // Reset selection
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
-                cell.piece = getDefaultPieceFor(i, j)
+                cell.piece = getDefaultPieceFor(i, j, theme)
             }
         }
     }
@@ -82,7 +83,7 @@ class Board(activity: Activity) {
             }
 
             is Pawn -> if (destinationCell.row == if (sourceCell.piece!!.color == PieceColor.WHITE) 7 else 0) {
-                Queen(sourceCell.piece!!.color)
+                Queen(sourceCell.piece!!.color, theme.resources.queen)
             } else {
                 sourceCell.piece
             }
@@ -95,19 +96,19 @@ class Board(activity: Activity) {
     private fun forEach(lambda: (value: Cell) -> Unit) = cells.flatten().forEach(lambda)
 
     companion object {
-        fun getDefaultPieceFor(r: Int, c: Int): Piece? {
+        fun getDefaultPieceFor(r: Int, c: Int, theme: Theme): Piece? {
             val color = if (r > 4) PieceColor.BLACK else PieceColor.WHITE
             return when (r) {
                 0, 7 -> when (c) {
-                    0, 7 -> Rook(color)
-                    1, 6 -> Knight(color)
-                    2, 5 -> Bishop(color)
-                    3 -> Queen(color)
-                    4 -> King(color)
+                    0, 7 -> Rook(color, theme.resources.rook)
+                    1, 6 -> Knight(color, theme.resources.knight)
+                    2, 5 -> Bishop(color, theme.resources.bishop)
+                    3 -> Queen(color, theme.resources.queen)
+                    4 -> King(color, theme.resources.king)
                     else -> null
                 }
 
-                1, 6 -> Pawn(color, r)
+                1, 6 -> Pawn(color, theme.resources.pawn, r)
                 else -> null
             }
         }

@@ -1,14 +1,11 @@
 package com.sejapoe.chess.game.piece
 
-import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
 
-class King(override val color: PieceColor) : Piece, CastingParticipant {
-    override val imageResource get() = R.drawable.king
-
+class King(override val color: PieceColor, override val imageResource: Int) : Piece, CastingParticipant {
     override var wasMoved = false
 
     override fun selectAvailableCells(r: Int, c: Int, board: Board) {

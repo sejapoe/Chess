@@ -3,14 +3,15 @@ package com.sejapoe.chess.game.board.cell
 import android.widget.ImageView
 import com.sejapoe.chess.R
 import com.sejapoe.chess.game.piece.Piece
+import com.sejapoe.chess.game.theme.Theme
 
-class Cell(private val imageView: ImageView, textId: String) {
+class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
     val img
         get() = imageView
 
     val column = textId[0] - 'a'
     val row = textId[1] - '1'
-    private val color = if ((row + column) % 2 == 0) CellColor.BLACK else CellColor.WHITE
+    private val color = if ((row + column) % 2 == 0) theme.colors.blackCell else theme.colors.whiteCell
     var state: CellState = CellState.NONE
         set(value) {
             img.setBackgroundColor(
