@@ -45,16 +45,17 @@ class Board(activity: Activity) {
 
     private fun tryMoveSelectedTo(cell: Cell): Boolean {
         if (selectedCell == null) return false
-        if (cell.piece != null && cell.piece!!.getColor() == selectedCell!!.piece!!.getColor()) return false // todo: attack
+        val fixedSelectedCell = selectedCell!!
+        if (cell.piece != null && cell.piece!!.getColor() == fixedSelectedCell.piece!!.getColor()) return false // todo: attack
         if (cell.isSelected) {
-            if (selectedCell!!.piece is Pawn &&
-                cell.row == if (selectedCell!!.piece!!.getColor() == PieceColor.WHITE) 7 else 0
+            if (fixedSelectedCell.piece is Pawn &&
+                cell.row == if (fixedSelectedCell.piece!!.getColor() == PieceColor.WHITE) 7 else 0
             ) {
-                cell.piece = Queen(selectedCell!!.piece!!.getColor()) // todo: select0
+                cell.piece = Queen(fixedSelectedCell.piece!!.getColor()) // todo: select0
             } else {
-                cell.piece = selectedCell!!.piece
+                cell.piece = fixedSelectedCell.piece
             }
-            selectedCell!!.piece = null
+            fixedSelectedCell.piece = null
         }
         selectedCell = null
         return true
