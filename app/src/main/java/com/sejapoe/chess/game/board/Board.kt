@@ -47,7 +47,13 @@ class Board(activity: Activity) {
         if (selectedCell == null) return false
         if (cell.piece != null && cell.piece!!.getColor() == selectedCell!!.piece!!.getColor()) return false // todo: attack
         if (cell.isSelected) {
-            cell.piece = selectedCell!!.piece
+            if (selectedCell!!.piece is Pawn &&
+                cell.row == if (selectedCell!!.piece!!.getColor() == PieceColor.WHITE) 7 else 0
+            ) {
+                cell.piece = Queen(selectedCell!!.piece!!.getColor()) // todo: select0
+            } else {
+                cell.piece = selectedCell!!.piece
+            }
             selectedCell!!.piece = null
         }
         selectedCell = null
