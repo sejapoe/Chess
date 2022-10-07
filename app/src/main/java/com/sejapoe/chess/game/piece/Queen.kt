@@ -14,7 +14,7 @@ class Queen(private val _color: PieceColor) : FarReachingPiece {
                 allowedDirections += i to j
             }
         }
-        super.getCandidateCells(r, c, board, allowedDirections)
+        super.selectAvailableCells(r, c, board, allowedDirections)
     }
 
     override fun getImageResource() = R.drawable.queen

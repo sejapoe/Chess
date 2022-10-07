@@ -15,7 +15,7 @@ class Rook(private val _color: PieceColor) : FarReachingPiece, CastingParticipan
             allowedDirections += i to 0
             allowedDirections += 0 to i
         }
-        super.getCandidateCells(r, c, board, allowedDirections)
+        super.selectAvailableCells(r, c, board, allowedDirections)
     }
 
     override fun getImageResource() = R.drawable.rook

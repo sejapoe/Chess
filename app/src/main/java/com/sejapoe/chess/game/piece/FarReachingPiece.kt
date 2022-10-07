@@ -4,7 +4,7 @@ import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.board.cell.CellState
 
 interface FarReachingPiece : Piece {
-    fun getCandidateCells(
+    fun selectAvailableCells(
         r: Int,
         c: Int,
         board: Board,
