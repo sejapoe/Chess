@@ -45,8 +45,7 @@ class Board(activity: Activity) {
     }
 
     private fun tryMoveSelectedTo(destinationCell: Cell): Boolean {
-        if (selectedCell == null) return false
-        val fixedSelectedCell = selectedCell!!
+        val fixedSelectedCell = selectedCell ?: return false
 
         if (destinationCell.piece != null && destinationCell.piece!!.getColor() == fixedSelectedCell.piece!!.getColor()) return false // todo: attack
 
@@ -73,19 +72,19 @@ class Board(activity: Activity) {
     }
 
     private fun move(sourceCell: Cell, destinationCell: Cell) {
-        when (sourceCell.piece) {
+        destinationCell.piece = when (sourceCell.piece) {
             is CastingParticipant -> {
                 (sourceCell.piece as CastingParticipant).wasMoved = true
-                destinationCell.piece = sourceCell.piece
+                sourceCell.piece
             }
 
             is Pawn -> if (destinationCell.row == if (sourceCell.piece!!.getColor() == PieceColor.WHITE) 7 else 0) {
-                destinationCell.piece = Queen(sourceCell.piece!!.getColor())
+                Queen(sourceCell.piece!!.getColor())
             } else {
-                destinationCell.piece = sourceCell.piece
+                sourceCell.piece
             }
 
-            else -> destinationCell.piece = sourceCell.piece
+            else -> sourceCell.piece
         }
         sourceCell.piece = null
     }
