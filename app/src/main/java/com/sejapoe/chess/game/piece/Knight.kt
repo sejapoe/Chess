@@ -1,9 +1,9 @@
-package com.sejapoe.chess.game.pieces
+package com.sejapoe.chess.game.piece
 
 import com.sejapoe.chess.R
-import com.sejapoe.chess.game.CellState
-import com.sejapoe.chess.game.PieceColor
 import com.sejapoe.chess.game.board.Board
+import com.sejapoe.chess.game.board.cell.CellState
+import com.sejapoe.chess.game.piece.core.PieceColor
 
 class Knight(private val _color: PieceColor) : Piece {
     override fun getColor(): PieceColor = _color

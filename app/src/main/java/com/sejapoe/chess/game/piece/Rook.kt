@@ -1,8 +1,9 @@
-package com.sejapoe.chess.game.pieces
+package com.sejapoe.chess.game.piece
 
 import com.sejapoe.chess.R
-import com.sejapoe.chess.game.PieceColor
 import com.sejapoe.chess.game.board.Board
+import com.sejapoe.chess.game.piece.core.CastingParticipant
+import com.sejapoe.chess.game.piece.core.PieceColor
 
 class Rook(private val _color: PieceColor) : FarReachingPiece, CastingParticipant {
     override var wasMoved = false

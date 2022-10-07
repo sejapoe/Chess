@@ -1,9 +1,9 @@
-package com.sejapoe.chess.game.pieces
+package com.sejapoe.chess.game.piece
 
-import com.sejapoe.chess.game.CellState
-import com.sejapoe.chess.game.PieceColor
 import com.sejapoe.chess.game.board.Board
-import com.sejapoe.chess.game.board.Cell
+import com.sejapoe.chess.game.board.cell.Cell
+import com.sejapoe.chess.game.board.cell.CellState
+import com.sejapoe.chess.game.piece.core.PieceColor
 
 sealed interface Piece {
     fun getColor(): PieceColor

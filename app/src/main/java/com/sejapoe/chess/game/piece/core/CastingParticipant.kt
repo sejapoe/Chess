@@ -1,4 +1,4 @@
-package com.sejapoe.chess.game.pieces
+package com.sejapoe.chess.game.piece.core
 
 interface CastingParticipant {
     var wasMoved: Boolean

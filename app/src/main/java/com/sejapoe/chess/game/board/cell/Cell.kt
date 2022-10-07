@@ -1,10 +1,8 @@
-package com.sejapoe.chess.game.board
+package com.sejapoe.chess.game.board.cell
 
 import android.widget.ImageView
 import com.sejapoe.chess.R
-import com.sejapoe.chess.game.CellColor
-import com.sejapoe.chess.game.CellState
-import com.sejapoe.chess.game.pieces.Piece
+import com.sejapoe.chess.game.piece.Piece
 
 class Cell(private val imageView: ImageView, textId: String) {
     val img

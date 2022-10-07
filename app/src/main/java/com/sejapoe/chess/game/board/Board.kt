@@ -1,9 +1,11 @@
 package com.sejapoe.chess.game.board
 
 import android.app.Activity
-import com.sejapoe.chess.game.CellState
-import com.sejapoe.chess.game.PieceColor
-import com.sejapoe.chess.game.pieces.*
+import com.sejapoe.chess.game.board.cell.Cell
+import com.sejapoe.chess.game.board.cell.CellState
+import com.sejapoe.chess.game.piece.*
+import com.sejapoe.chess.game.piece.core.CastingParticipant
+import com.sejapoe.chess.game.piece.core.PieceColor
 
 class Board(activity: Activity) {
     // Initialize cells, assign for each cell it's imageView
@@ -16,7 +18,9 @@ class Board(activity: Activity) {
     }
     private var selectedCell: Cell? = null
         set(value) {
-            resetSelection()
+            forEach {
+                it.state = CellState.NONE
+            }
             if (value != null) {
                 value.state = CellState.STAY
                 value.piece!!.selectAvailableCells(value.row, value.column, this)
@@ -37,7 +41,7 @@ class Board(activity: Activity) {
 
     // Set all cells to initial state
     fun resetSetup() {
-        resetSelection()
+        selectedCell = null // Reset selection
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
                 cell.piece = getDefaultPieceFor(i, j)
@@ -48,13 +52,14 @@ class Board(activity: Activity) {
     private fun tryMoveSelectedTo(destinationCell: Cell): Boolean {
         val fixedSelectedCell = selectedCell ?: return false
 
-        if (destinationCell.piece != null && destinationCell.piece!!.getColor() == fixedSelectedCell.piece!!.getColor()) return false // todo: attack
-
         when (destinationCell.state) {
             CellState.MOVE -> move(fixedSelectedCell, destinationCell)
-            CellState.ATTACK -> TODO()
+            CellState.ATTACK -> move(fixedSelectedCell, destinationCell) // TODO: Make distinct attack logic
             CellState.CAST -> cast(fixedSelectedCell, destinationCell)
-            else -> {}
+            else -> {
+                selectedCell = null
+                return false
+            }
         }
         selectedCell = null
         return true
@@ -64,8 +69,8 @@ class Board(activity: Activity) {
         val delta = if (kingCell.column > destinationCell.column) 1 else -1
         move(kingCell, destinationCell)
         move(
-            cells[destinationCell.row][destinationCell.column - delta],
-            cells[destinationCell.row][destinationCell.column + delta]
+            cells[destinationCell.row][destinationCell.column - delta], // Rook position
+            cells[destinationCell.row][destinationCell.column + delta] // Rook destination
         )
     }
 
@@ -87,19 +92,7 @@ class Board(activity: Activity) {
         sourceCell.piece = null
     }
 
-    private fun resetSelection() {
-        forEach {
-            it.state = CellState.NONE
-        }
-    }
-
-    fun forEach(foo: (value: Cell) -> Unit) {
-        for (r in 0..7) {
-            for (c in 0..7) {
-                foo(cells[r][c])
-            }
-        }
-    }
+    private fun forEach(lambda: (value: Cell) -> Unit) = cells.flatten().forEach(lambda)
 
     companion object {
         fun getDefaultPieceFor(r: Int, c: Int): Piece? {
