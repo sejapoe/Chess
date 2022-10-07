@@ -10,12 +10,12 @@ enum class Theme(
     DEFAULT(
         ThemeColors(
             blackCell = CellColor(
-                mainColor = Color.rgb(50, 50, 50),
-                selectionColor = Color.rgb(80, 50, 50)
+                mainColor = Color.rgb(70, 70, 50),
+                selectionColor = Color.rgb(90, 70, 50)
             ),
             whiteCell = CellColor(
-                mainColor = Color.rgb(90, 90, 90),
-                selectionColor = Color.rgb(120, 90, 90)
+                mainColor = Color.rgb(110, 110, 90),
+                selectionColor = Color.rgb(130, 110, 90)
             ),
             blackPiece = Color.BLACK,
             whitePiece = Color.WHITE
