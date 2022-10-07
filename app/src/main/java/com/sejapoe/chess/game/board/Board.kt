@@ -39,7 +39,7 @@ class Board(activity: Activity) {
         resetSelection()
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
-                cell.piece = defaultSetup[i][j]
+                cell.piece = getDefaultPieceFor(i, j)
             }
         }
     }
@@ -106,34 +106,21 @@ class Board(activity: Activity) {
     }
 
     companion object {
-        // initial state of chessboard
-        val defaultSetup = mutableListOf(
-            mutableListOf(
-                Rook(PieceColor.BLACK),
-                Knight(PieceColor.BLACK),
-                Bishop(PieceColor.BLACK),
-                Queen(PieceColor.BLACK),
-                King(PieceColor.BLACK),
-                Bishop(PieceColor.BLACK),
-                Knight(PieceColor.BLACK),
-                Rook(PieceColor.BLACK)
-            ),
-            MutableList(8) { Pawn(PieceColor.BLACK, 6) },
-            MutableList(8) { null },
-            MutableList(8) { null },
-            MutableList(8) { null },
-            MutableList(8) { null },
-            MutableList(8) { Pawn(PieceColor.WHITE, 1) },
-            mutableListOf(
-                Rook(PieceColor.WHITE),
-                Knight(PieceColor.WHITE),
-                Bishop(PieceColor.WHITE),
-                Queen(PieceColor.WHITE),
-                King(PieceColor.WHITE),
-                Bishop(PieceColor.WHITE),
-                Knight(PieceColor.WHITE),
-                Rook(PieceColor.WHITE)
-            ),
-        ).reversed()
+        fun getDefaultPieceFor(r: Int, c: Int): Piece? {
+            val color = if (r > 4) PieceColor.BLACK else PieceColor.WHITE
+            return when (r) {
+                0, 7 -> when (c) {
+                    0, 7 -> Rook(color)
+                    1, 6 -> Knight(color)
+                    2, 5 -> Bishop(color)
+                    3 -> Queen(color)
+                    4 -> King(color)
+                    else -> null
+                }
+
+                1, 6 -> Pawn(color, c)
+                else -> null
+            }
+        }
     }
 }
