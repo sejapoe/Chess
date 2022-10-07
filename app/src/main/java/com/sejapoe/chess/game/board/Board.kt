@@ -81,8 +81,8 @@ class Board(activity: Activity) {
                 sourceCell.piece
             }
 
-            is Pawn -> if (destinationCell.row == if (sourceCell.piece!!.getColor() == PieceColor.WHITE) 7 else 0) {
-                Queen(sourceCell.piece!!.getColor())
+            is Pawn -> if (destinationCell.row == if (sourceCell.piece!!.color == PieceColor.WHITE) 7 else 0) {
+                Queen(sourceCell.piece!!.color)
             } else {
                 sourceCell.piece
             }

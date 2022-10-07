@@ -6,10 +6,10 @@ import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
 
-class King(private val _color: PieceColor) : Piece, CastingParticipant {
-    override var wasMoved = false
+class King(override val color: PieceColor) : Piece, CastingParticipant {
+    override val imageResource get() = R.drawable.king
 
-    override fun getColor() = _color
+    override var wasMoved = false
 
     override fun selectAvailableCells(r: Int, c: Int, board: Board) {
         for (i in -1..1) {
@@ -39,6 +39,4 @@ class King(private val _color: PieceColor) : Piece, CastingParticipant {
                 board.cells[r][c + 2].setCellState(CellState.CAST)
         }
     }
-
-    override fun getImageResource() = R.drawable.king
 }

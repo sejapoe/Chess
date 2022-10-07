@@ -5,8 +5,8 @@ import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.piece.core.PieceColor
 
-class Knight(private val _color: PieceColor) : Piece {
-    override fun getColor(): PieceColor = _color
+class Knight(override val color: PieceColor) : Piece {
+    override val imageResource get() = R.drawable.knight
 
     override fun selectAvailableCells(r: Int, c: Int, board: Board) {
         for (i in -1..1 step 2) {
@@ -21,6 +21,4 @@ class Knight(private val _color: PieceColor) : Piece {
             }
         }
     }
-
-    override fun getImageResource() = R.drawable.knight
 }

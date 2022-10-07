@@ -6,15 +6,15 @@ import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.piece.core.PieceColor
 
 sealed interface Piece {
-    fun getColor(): PieceColor
+    val color: PieceColor
+    val imageResource: Int
     fun selectAvailableCells(r: Int, c: Int, board: Board)
-    fun getImageResource(): Int
 
     fun Cell.setCellState(cellState: CellState) {
         state = when {
             piece == null -> cellState
             piece === this@Piece -> CellState.STAY
-            piece!!.getColor() == this@Piece.getColor() -> CellState.NONE
+            piece!!.color == this@Piece.color -> CellState.NONE
             else -> CellState.ATTACK
         }
     }

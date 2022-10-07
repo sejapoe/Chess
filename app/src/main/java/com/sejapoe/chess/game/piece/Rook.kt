@@ -5,9 +5,10 @@ import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
 
-class Rook(private val _color: PieceColor) : FarReachingPiece, CastingParticipant {
+class Rook(override val color: PieceColor) : FarReachingPiece, CastingParticipant {
+    override val imageResource get() = R.drawable.rook
+
     override var wasMoved = false
-    override fun getColor(): PieceColor = _color
 
     override fun selectAvailableCells(r: Int, c: Int, board: Board) {
         val allowedDirections: MutableSet<Pair<Int, Int>> = mutableSetOf()
@@ -17,6 +18,4 @@ class Rook(private val _color: PieceColor) : FarReachingPiece, CastingParticipan
         }
         super.selectAvailableCells(r, c, board, allowedDirections)
     }
-
-    override fun getImageResource() = R.drawable.rook
 }

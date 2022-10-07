@@ -26,8 +26,8 @@ class Cell(private val imageView: ImageView, textId: String) {
             when (value) {
                 null -> img.setImageResource(R.drawable.cell)
                 else -> {
-                    img.setImageResource(value.getImageResource())
-                    img.setColorFilter(value.getColor().toInt())
+                    img.setImageResource(value.imageResource)
+                    img.setColorFilter(value.color.toInt())
                 }
             }
             field = value
