@@ -17,7 +17,7 @@ class Board(activity: Activity, val theme: Theme) {
             Cell(activity.findViewById(id), theme, textId)
         }
     }
-    private var selectedCell: Cell? = null
+    var selectedCell: Cell? = null
         set(value) {
             forEach {
                 it.state = CellState.NONE
@@ -29,16 +29,6 @@ class Board(activity: Activity, val theme: Theme) {
             field = value
         }
 
-    // Add interaction logic
-    init {
-        for (cell in cells.flatten()) {
-            cell.setOnClickListener {
-                if (!tryMoveSelectedTo(it) && it.piece != null) {
-                    selectedCell = it
-                }
-            }
-        }
-    }
 
     // Set all cells to initial state
     fun resetSetup() {
@@ -50,7 +40,7 @@ class Board(activity: Activity, val theme: Theme) {
         }
     }
 
-    private fun tryMoveSelectedTo(destinationCell: Cell): Boolean {
+    fun tryMoveSelectedTo(destinationCell: Cell): Boolean {
         val fixedSelectedCell = selectedCell ?: return false
 
         when (destinationCell.state) {
