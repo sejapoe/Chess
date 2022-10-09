@@ -1,13 +1,13 @@
 package com.sejapoe.chess.game.piece
 
-import com.sejapoe.chess.game.board.Board
+import com.sejapoe.chess.game.board.IBoard
 import com.sejapoe.chess.game.board.cell.CellState
 
 interface FarReachingPiece : Piece {
     fun selectAvailableCells(
         r: Int,
         c: Int,
-        board: Board,
+        board: IBoard,
         directions: Set<Pair<Int, Int>>
     ) {
         val allowedDirections = directions.toHashSet()
@@ -23,8 +23,7 @@ interface FarReachingPiece : Piece {
                     if (board.cells[rDest][cDest].piece != null) {
                         allowedDirections.remove(dir)
                     }
-                    board.cells[r][c].possibleTurns[rDest][cDest] =
-                        board.cells[rDest][cDest].performCellState(CellState.MOVE)
+                    board.cells[rDest][cDest].performCellState(board.cells[r][c], CellState.MOVE)
                 }
             }
         }

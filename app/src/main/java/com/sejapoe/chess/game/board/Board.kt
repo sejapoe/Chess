@@ -1,16 +1,18 @@
 package com.sejapoe.chess.game.board
 
 import android.app.Activity
+import com.sejapoe.chess.game.Game
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.cell.CellState
+import com.sejapoe.chess.game.board.cell.ICell
 import com.sejapoe.chess.game.piece.*
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
 
-class Board(activity: Activity, val theme: Theme) {
+class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
     // Initialize cells, assign for each cell it's imageView
-    val cells: MutableList<MutableList<Cell>> = MutableList(8) {
+    override val cells: MutableList<MutableList<ICell>> = MutableList(8) {
         MutableList(8) { jt ->
             val textId = "${'a' + jt}${it + 1}"
             val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
@@ -18,7 +20,7 @@ class Board(activity: Activity, val theme: Theme) {
         }
     }
 
-    var state: BoardState = BoardState.DEFAULT
+    override var state: BoardState = BoardState.DEFAULT
 
     var selectedCell: Cell? = null
         set(value) {
@@ -48,6 +50,9 @@ class Board(activity: Activity, val theme: Theme) {
         this.state = BoardState.DEFAULT
         val whiteKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.WHITE }!!
         val blackKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.BLACK }!!
+        cells.flatten().forEach {
+            it.updatePossibleTurns()
+        }
         for (it in cells.flatten()) {
             if (it.possibleTurns[whiteKing.row][whiteKing.column] == CellState.ATTACK) {
                 this.state = BoardState.CHECK_WHITE
@@ -61,6 +66,12 @@ class Board(activity: Activity, val theme: Theme) {
         cells.flatten().forEach {
             it.updatePossibleTurns()
         }
+        if (cells.flatten().filter { it.piece?.color == !game.turn }
+                .all { it.possibleTurns.flatten().all { j -> j == CellState.NONE || j == CellState.STAY } }) {
+            if (this.state == BoardState.CHECK_WHITE) this.state = BoardState.CHECKMATE_WHITE else this.state =
+                BoardState.CHECKMATE_BLACK
+        }
+        game.turn = !game.turn
     }
 
     fun tryMoveSelectedTo(destinationCell: Cell): Boolean {
@@ -80,7 +91,7 @@ class Board(activity: Activity, val theme: Theme) {
         return true
     }
 
-    private fun cast(kingCell: Cell, destinationCell: Cell) {
+    private fun cast(kingCell: ICell, destinationCell: ICell) {
         val delta = if (kingCell.column > destinationCell.column) 1 else -1
         move(kingCell, destinationCell)
         move(
@@ -89,7 +100,7 @@ class Board(activity: Activity, val theme: Theme) {
         )
     }
 
-    private fun move(sourceCell: Cell, destinationCell: Cell) {
+    private fun move(sourceCell: ICell, destinationCell: ICell) {
         destinationCell.piece = when (sourceCell.piece) {
             is CastingParticipant -> {
                 (sourceCell.piece as CastingParticipant).wasMoved = true
@@ -107,7 +118,16 @@ class Board(activity: Activity, val theme: Theme) {
         sourceCell.piece = null
     }
 
-    private fun forEach(lambda: (value: Cell) -> Unit) = cells.flatten().forEach(lambda)
+    private fun forEach(lambda: (value: ICell) -> Unit) = cells.flatten().forEach(lambda)
+
+    fun simulateState(source: ICell, cell: ICell): BoardState {
+//        if (selectedCell == null) return BoardState.DEFAULT
+        val fakeBoard = FakeBoard(this)
+        fakeBoard.cells[source.row][source.column].piece = null
+        fakeBoard.cells[cell.row][cell.column].piece = source.piece
+        fakeBoard.performTurn()
+        return fakeBoard.state
+    }
 
     companion object {
         fun getDefaultPieceFor(r: Int, c: Int, theme: Theme): Piece? {

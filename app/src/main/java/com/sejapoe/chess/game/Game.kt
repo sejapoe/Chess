@@ -5,13 +5,14 @@ import android.app.Activity
 import android.widget.TextView
 import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.Board
+import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
 
 class Game(activity: Activity, theme: Theme) {
-    val board = Board(activity, theme)
+    val board = Board(activity, theme, this)
     private val turnText: TextView = activity.findViewById<TextView>(R.id.turnText)
-    private var turn = PieceColor.WHITE
+    var turn = PieceColor.WHITE
         @SuppressLint("SetTextI18n")
         set(value) {
             turnText.text = "${value.name} ${board.state.name}"
@@ -21,9 +22,9 @@ class Game(activity: Activity, theme: Theme) {
     // Add interaction logic
     init {
         for (cell in board.cells.flatten()) {
-            cell.setOnClickListener {
+            (cell as Cell).setOnClickListener {
                 if (board.tryMoveSelectedTo(it)) {
-                    turn = !turn
+//                    turn = !turn
                 } else if (it.piece != null) {
                     if (it.piece!!.color == turn) board.selectedCell = it
                 }
