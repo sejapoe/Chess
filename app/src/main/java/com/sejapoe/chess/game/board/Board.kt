@@ -14,7 +14,7 @@ class Board(activity: Activity, val theme: Theme) {
         MutableList(8) { jt ->
             val textId = "${'a' + jt}${it + 1}"
             val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
-            Cell(activity.findViewById(id), theme, textId)
+            Cell(activity.findViewById(id), this, textId)
         }
     }
 
@@ -27,7 +27,7 @@ class Board(activity: Activity, val theme: Theme) {
             }
             if (value != null) {
                 value.state = CellState.STAY
-                value.selectPossibleTurns(this)
+                value.selectPossibleTurns()
             }
             field = value
         }
@@ -41,7 +41,7 @@ class Board(activity: Activity, val theme: Theme) {
                 cell.piece = getDefaultPieceFor(i, j, theme)
             }
         }
-        cells.flatten().forEach { it.updatePossibleTurns(this) }
+        cells.flatten().forEach { it.updatePossibleTurns() }
     }
 
     private fun performTurn() {
@@ -59,7 +59,7 @@ class Board(activity: Activity, val theme: Theme) {
             }
         }
         cells.flatten().forEach {
-            it.updatePossibleTurns(this)
+            it.updatePossibleTurns()
         }
     }
 

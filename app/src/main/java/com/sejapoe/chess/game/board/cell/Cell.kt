@@ -4,14 +4,13 @@ import android.widget.ImageView
 import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.piece.Piece
-import com.sejapoe.chess.game.theme.Theme
 
-class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
+class Cell(private val imageView: ImageView, val board: Board, textId: String) {
     val img
         get() = imageView
     val column = textId[0] - 'a'
     val row = textId[1] - '1'
-    private val color = if ((row + column) % 2 == 0) theme.colors.blackCell else theme.colors.whiteCell
+    private val color = if ((row + column) % 2 == 0) board.theme.colors.blackCell else board.theme.colors.whiteCell
     var state: CellState = CellState.NONE
         set(value) {
             img.setBackgroundColor(
@@ -39,7 +38,7 @@ class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
         img.setBackgroundColor(color.mainColor)
     }
 
-    fun updatePossibleTurns(board: Board) {
+    fun updatePossibleTurns() {
         for (i in 0..7) {
             for (j in 0..7) {
                 possibleTurns[i][j] = CellState.NONE
@@ -51,7 +50,7 @@ class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
         }
     }
 
-    fun selectPossibleTurns(board: Board) {
+    fun selectPossibleTurns() {
         for (i in 0..7) {
             for (j in 0..7) {
                 board.cells[i][j].state = possibleTurns[i][j]
