@@ -48,12 +48,18 @@ class Board(activity: Activity, val theme: Theme) {
         this.state = BoardState.DEFAULT
         val whiteKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.WHITE }!!
         val blackKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.BLACK }!!
+        for (it in cells.flatten()) {
+            if (it.possibleTurns[whiteKing.row][whiteKing.column] == CellState.ATTACK) {
+                this.state = BoardState.CHECK_WHITE
+                break
+            }
+            if (it.possibleTurns[blackKing.row][blackKing.column] == CellState.ATTACK) {
+                this.state = BoardState.CHECK_BLACK
+                break
+            }
+        }
         cells.flatten().forEach {
             it.updatePossibleTurns(this)
-            if (it.possibleTurns[whiteKing.row][whiteKing.column] == CellState.ATTACK) this.state =
-                BoardState.CHECK_WHITE
-            if (it.possibleTurns[blackKing.row][blackKing.column] == CellState.ATTACK) this.state =
-                BoardState.CHECK_BLACK
         }
     }
 
