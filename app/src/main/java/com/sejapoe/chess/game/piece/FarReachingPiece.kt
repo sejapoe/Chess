@@ -23,7 +23,8 @@ interface FarReachingPiece : Piece {
                     if (board.cells[rDest][cDest].piece != null) {
                         allowedDirections.remove(dir)
                     }
-                    board.cells[rDest][cDest].setCellState(CellState.MOVE)
+                    board.cells[r][c].possibleTurns[rDest][cDest] =
+                        board.cells[rDest][cDest].performCellState(CellState.MOVE)
                 }
             }
         }

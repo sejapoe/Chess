@@ -17,6 +17,9 @@ class Board(activity: Activity, val theme: Theme) {
             Cell(activity.findViewById(id), theme, textId)
         }
     }
+
+    var state: BoardState = BoardState.DEFAULT
+
     var selectedCell: Cell? = null
         set(value) {
             forEach {
@@ -24,7 +27,7 @@ class Board(activity: Activity, val theme: Theme) {
             }
             if (value != null) {
                 value.state = CellState.STAY
-                value.piece!!.selectAvailableCells(value.row, value.column, this)
+                value.selectPossibleTurns(this)
             }
             field = value
         }
@@ -37,6 +40,20 @@ class Board(activity: Activity, val theme: Theme) {
             row.forEachIndexed { j, cell ->
                 cell.piece = getDefaultPieceFor(i, j, theme)
             }
+        }
+        cells.flatten().forEach { it.updatePossibleTurns(this) }
+    }
+
+    private fun performTurn() {
+        this.state = BoardState.DEFAULT
+        val whiteKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.WHITE }!!
+        val blackKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.BLACK }!!
+        cells.flatten().forEach {
+            it.updatePossibleTurns(this)
+            if (it.possibleTurns[whiteKing.row][whiteKing.column] == CellState.ATTACK) this.state =
+                BoardState.CHECK_WHITE
+            if (it.possibleTurns[blackKing.row][blackKing.column] == CellState.ATTACK) this.state =
+                BoardState.CHECK_BLACK
         }
     }
 
@@ -53,6 +70,7 @@ class Board(activity: Activity, val theme: Theme) {
             }
         }
         selectedCell = null
+        performTurn()
         return true
     }
 

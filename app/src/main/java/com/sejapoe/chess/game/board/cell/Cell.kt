@@ -2,13 +2,13 @@ package com.sejapoe.chess.game.board.cell
 
 import android.widget.ImageView
 import com.sejapoe.chess.R
+import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.piece.Piece
 import com.sejapoe.chess.game.theme.Theme
 
 class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
     val img
         get() = imageView
-
     val column = textId[0] - 'a'
     val row = textId[1] - '1'
     private val color = if ((row + column) % 2 == 0) theme.colors.blackCell else theme.colors.whiteCell
@@ -22,6 +22,7 @@ class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
             )
             field = value
         }
+    var possibleTurns: MutableList<MutableList<CellState>> = MutableList(8) { MutableList(8) { CellState.NONE } }
     var piece: Piece? = null
         set(value) {
             when (value) {
@@ -36,6 +37,26 @@ class Cell(private val imageView: ImageView, val theme: Theme, textId: String) {
 
     init {
         img.setBackgroundColor(color.mainColor)
+    }
+
+    fun updatePossibleTurns(board: Board) {
+        for (i in 0..7) {
+            for (j in 0..7) {
+                possibleTurns[i][j] = CellState.NONE
+            }
+        }
+        if (piece != null) {
+            piece?.updatePossibleTurns(row, column, board)
+            possibleTurns[row][column] = CellState.STAY
+        }
+    }
+
+    fun selectPossibleTurns(board: Board) {
+        for (i in 0..7) {
+            for (j in 0..7) {
+                board.cells[i][j].state = possibleTurns[i][j]
+            }
+        }
     }
 
     fun setOnClickListener(listener: OnClickListener) {

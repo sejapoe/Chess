@@ -1,5 +1,6 @@
 package com.sejapoe.chess.game
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.widget.TextView
 import com.sejapoe.chess.R
@@ -11,8 +12,9 @@ class Game(activity: Activity, theme: Theme) {
     val board = Board(activity, theme)
     private val turnText: TextView = activity.findViewById<TextView>(R.id.turnText)
     private var turn = PieceColor.WHITE
+        @SuppressLint("SetTextI18n")
         set(value) {
-            turnText.text = value.name
+            turnText.text = "${value.name} ${board.state.name}"
             field = value
         }
 
