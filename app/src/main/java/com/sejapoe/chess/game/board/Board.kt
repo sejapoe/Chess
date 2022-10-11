@@ -48,28 +48,20 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
     private fun performTurn() {
         this.state = BoardState.DEFAULT
-        val whiteKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.WHITE }!!
-        val blackKing = cells.flatten().find { it.piece is King && it.piece?.color == PieceColor.BLACK }!!
-        cells.flatten().forEach {
+        cells.flatten().forEach { it.resetPossibleTurns() }
+        cells.flatten().filter { it.piece?.color == game.turn }.forEach {
             it.updatePossibleTurns()
         }
-        for (it in cells.flatten()) {
-            if (it.possibleTurns[whiteKing.row][whiteKing.column] == CellState.ATTACK) {
-                this.state = BoardState.CHECK_WHITE
-                break
-            }
-            if (it.possibleTurns[blackKing.row][blackKing.column] == CellState.ATTACK) {
-                this.state = BoardState.CHECK_BLACK
-                break
-            }
-        }
-        cells.flatten().forEach {
+        this.checkForCheck()
+        var flag = true
+        cells.flatten().filter { it.piece?.color == !game.turn }.forEach {
             it.updatePossibleTurns()
+            if (flag && !it.possibleTurns.flatten().all { jt -> jt == CellState.NONE || jt == CellState.STAY }) {
+                flag = false
+            }
         }
-        if (cells.flatten().filter { it.piece?.color == !game.turn }
-                .all { it.possibleTurns.flatten().all { j -> j == CellState.NONE || j == CellState.STAY } }) {
-            if (this.state == BoardState.CHECK_WHITE) this.state = BoardState.CHECKMATE_WHITE else this.state =
-                BoardState.CHECKMATE_BLACK
+        if (flag) {
+            this.state = BoardState.CHECKMATE
         }
         game.turn = !game.turn
     }
@@ -122,7 +114,7 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
     fun simulateState(source: ICell, cell: ICell): BoardState {
 //        if (selectedCell == null) return BoardState.DEFAULT
-        val fakeBoard = FakeBoard(this)
+        val fakeBoard = FakeBoard(this, game.turn)
         fakeBoard.cells[source.row][source.column].piece = null
         fakeBoard.cells[cell.row][cell.column].piece = source.piece
         fakeBoard.performTurn()

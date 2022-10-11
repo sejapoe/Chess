@@ -10,6 +10,11 @@ class FakeCell(cell: Cell, override val board: IBoard) : ICell {
     override var possibleTurns: MutableList<MutableList<CellState>> =
         MutableList(8) { MutableList(8) { CellState.NONE } }
     override var piece: Piece? = cell.piece
+    override fun resetPossibleTurns() {
+        possibleTurns.forEach {
+            it.replaceAll { CellState.NONE }
+        }
+    }
 
     override fun updatePossibleTurns() {
         for (i in 0..7) {

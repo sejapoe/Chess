@@ -5,6 +5,7 @@ import com.sejapoe.chess.game.piece.Piece
 
 interface ICell {
     fun updatePossibleTurns()
+    fun resetPossibleTurns()
 
     val board: IBoard
     var state: CellState

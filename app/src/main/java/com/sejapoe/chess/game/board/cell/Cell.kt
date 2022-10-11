@@ -21,6 +21,13 @@ class Cell(private val imageView: ImageView, override val board: Board, textId: 
             )
             field = value
         }
+
+    override fun resetPossibleTurns() {
+        possibleTurns.forEach {
+            it.replaceAll { CellState.NONE }
+        }
+    }
+
     override var possibleTurns: MutableList<MutableList<CellState>> =
         MutableList(8) { MutableList(8) { CellState.NONE } }
     override var piece: Piece? = null

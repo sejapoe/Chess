@@ -17,11 +17,9 @@ sealed interface Piece {
             board.cells[source.row][source.column].possibleTurns[row][column] = CellState.ATTACK
             return
         }
-        if (board.state == BoardState.CHECK_BLACK || board.state == BoardState.CHECK_WHITE) {
-            if ((board as Board).simulateState(source, this) != BoardState.DEFAULT) {
-                board.cells[source.row][source.column].possibleTurns[row][column] = CellState.NONE
-                return
-            }
+        if (board is Board && (board as Board).simulateState(source, this) != BoardState.DEFAULT) {
+            board.cells[source.row][source.column].possibleTurns[row][column] = CellState.NONE
+            return
         }
         board.cells[source.row][source.column].possibleTurns[row][column] = when {
             piece == null -> cellState
