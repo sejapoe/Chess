@@ -17,15 +17,18 @@ sealed interface Piece {
             board.cells[source.row][source.column].possibleTurns[row][column] = CellState.ATTACK
             return
         }
-        if (board is Board && (board as Board).simulateState(source, this) != BoardState.DEFAULT) {
-            board.cells[source.row][source.column].possibleTurns[row][column] = CellState.NONE
-            return
-        }
-        board.cells[source.row][source.column].possibleTurns[row][column] = when {
+        val cellState1 = when {
             piece == null -> cellState
             piece === this@Piece -> CellState.STAY
             piece!!.color == this@Piece.color -> CellState.NONE
             else -> CellState.ATTACK
         }
+        board.cells[source.row][source.column].possibleTurns[row][column] =
+            (if (board is Board && (board as Board).simulateState(
+                    source,
+                    this,
+                    cellState1
+                ) != BoardState.DEFAULT
+            ) CellState.NONE else cellState1)
     }
 }

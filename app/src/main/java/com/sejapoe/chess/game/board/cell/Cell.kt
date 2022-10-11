@@ -66,10 +66,15 @@ class Cell(private val imageView: ImageView, override val board: Board, textId: 
         }
     }
 
+
     fun setOnClickListener(listener: OnClickListener) {
         imageView.setOnClickListener {
             listener.onClick(this)
         }
+    }
+
+    override fun toString(): String {
+        return "Cell(column=$column, row=$row, piece=${piece?.javaClass?.simpleName}[${piece?.color}])"
     }
 
     fun interface OnClickListener {

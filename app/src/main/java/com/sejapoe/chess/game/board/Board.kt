@@ -37,6 +37,7 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
     // Set all cells to initial state
     fun resetSetup() {
+        this.state = BoardState.DEFAULT
         selectedCell = null // Reset selection
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
@@ -61,7 +62,7 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
             }
         }
         if (flag) {
-            this.state = BoardState.CHECKMATE
+            this.state = if (this.state == BoardState.CHECK) BoardState.CHECKMATE else BoardState.DRAW
         }
         game.turn = !game.turn
     }
@@ -112,11 +113,13 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
     private fun forEach(lambda: (value: ICell) -> Unit) = cells.flatten().forEach(lambda)
 
-    fun simulateState(source: ICell, cell: ICell): BoardState {
-//        if (selectedCell == null) return BoardState.DEFAULT
+    fun simulateState(source: ICell, cell: ICell, cellState: CellState): BoardState {
+        if (source.piece == null) return this.state
         val fakeBoard = FakeBoard(this, game.turn)
-        fakeBoard.cells[source.row][source.column].piece = null
-        fakeBoard.cells[cell.row][cell.column].piece = source.piece
+        if (fakeBoard.cells[cell.row][cell.column].piece == null || cellState == CellState.ATTACK) {
+            fakeBoard.cells[source.row][source.column].piece = null
+            fakeBoard.cells[cell.row][cell.column].piece = source.piece
+        }
         fakeBoard.performTurn()
         return fakeBoard.state
     }
