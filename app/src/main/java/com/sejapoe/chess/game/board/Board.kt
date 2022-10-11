@@ -56,14 +56,19 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
         }
         this.checkForCheck()
         var flag = true
-        cells.flatten().filter { it.piece?.color == !game.turn }.forEach {
+        cells.flatten().forEach {
             it.updatePossibleTurns()
-            if (flag && !it.possibleTurns.flatten().all { jt -> jt == CellState.NONE || jt == CellState.STAY }) {
+            if (flag && it.piece?.color == !game.turn && !it.possibleTurns.flatten()
+                    .all { jt -> jt == CellState.NONE || jt == CellState.STAY }
+            ) {
                 flag = false
             }
         }
         if (flag) {
             this.state = if (this.state == BoardState.CHECK) BoardState.CHECKMATE else BoardState.DRAW
+        }
+        cells.flatten().filter { it.piece is King }.forEach {
+            it.updatePossibleTurns()
         }
         game.turn = !game.turn
     }
@@ -116,6 +121,15 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
     fun simulateState(source: ICell, cell: ICell, cellState: CellState): BoardState {
         if (source.piece == null) return this.state
+        if (source.piece?.color == game.turn) return BoardState.DEFAULT
+        if (cellState == CellState.CAST) {
+            if (this.state == BoardState.CHECK) return BoardState.CHECK
+            return if (cells.flatten().filter { it.piece?.color != source.piece?.color }.none {
+                    (if (cell.column < source.column) -3..-1 else 1..2).any { i ->
+                        it.possibleTurns[source.row][i + source.column] != CellState.NONE
+                    }
+                }) BoardState.DEFAULT else BoardState.CHECK
+        }
         val fakeBoard = FakeBoard(this, game.turn)
         if (fakeBoard.cells[cell.row][cell.column].piece == null || cellState == CellState.ATTACK) {
             fakeBoard.cells[source.row][source.column].piece = null
