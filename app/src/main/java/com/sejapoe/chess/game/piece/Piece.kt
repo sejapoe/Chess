@@ -13,10 +13,6 @@ sealed interface Piece {
     fun updatePossibleTurns(r: Int, c: Int, board: IBoard)
 
     fun ICell.performCellState(source: ICell, cellState: CellState) {
-        if (piece is King && cellState == CellState.ATTACK) {
-            board.cells[source.row][source.column].possibleTurns[row][column] = CellState.ATTACK
-            return
-        }
         val cellState1 = when {
             piece == null -> cellState
             piece === this@Piece -> CellState.STAY
