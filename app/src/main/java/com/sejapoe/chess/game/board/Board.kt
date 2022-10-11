@@ -37,7 +37,6 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
     // Set all cells to initial state
     fun resetSetup() {
-        this.state = BoardState.DEFAULT
         selectedCell = null // Reset selection
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
@@ -45,6 +44,8 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
             }
         }
         cells.flatten().forEach { it.updatePossibleTurns() }
+        this.state = BoardState.DEFAULT
+        game.turn = PieceColor.WHITE
     }
 
     private fun performTurn() {
