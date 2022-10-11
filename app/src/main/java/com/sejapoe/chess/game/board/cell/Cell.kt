@@ -6,7 +6,7 @@ import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.piece.Piece
 
 class Cell(private val imageView: ImageView, override val board: Board, textId: String) : ICell {
-    val img
+    private val img
         get() = imageView
     override val column = textId[0] - 'a'
     override val row = textId[1] - '1'
@@ -21,12 +21,6 @@ class Cell(private val imageView: ImageView, override val board: Board, textId: 
             )
             field = value
         }
-
-    override fun resetPossibleTurns() {
-        possibleTurns.forEach {
-            it.replaceAll { CellState.NONE }
-        }
-    }
 
     override var possibleTurns: MutableList<MutableList<CellState>> =
         MutableList(8) { MutableList(8) { CellState.NONE } }
@@ -44,18 +38,6 @@ class Cell(private val imageView: ImageView, override val board: Board, textId: 
 
     init {
         img.setBackgroundColor(color.mainColor)
-    }
-
-    override fun updatePossibleTurns() {
-        for (i in 0..7) {
-            for (j in 0..7) {
-                possibleTurns[i][j] = CellState.NONE
-            }
-        }
-        if (piece != null) {
-            piece?.updatePossibleTurns(row, column, board)
-            possibleTurns[row][column] = CellState.STAY
-        }
     }
 
     fun selectPossibleTurns() {
