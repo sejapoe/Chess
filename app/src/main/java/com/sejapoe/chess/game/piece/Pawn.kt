@@ -18,13 +18,13 @@ class Pawn(override val color: PieceColor, override val imageResource: Int, priv
             )
             if (r == startRow) board.cells[r + mul * 2][c].performCellState(board.cells[r][c], CellState.MOVE)
         }
-        if (c != 0 && board.cells[r + mul][c - 1].piece != null) board.cells[r + mul][c - 1].performCellState(
-            board.cells[r][c],
-            CellState.ATTACK
+        if (c != 0 && (board.cells[r + mul][c - 1].piece != null ||
+                    board.cells[r][c - 1].piece is Pawn && board.history.isNotEmpty() && board.history.last().piece === board.cells[r][c - 1].piece)
         )
-        if (c != 7 && board.cells[r + mul][c + 1].piece != null) board.cells[r + mul][c + 1].performCellState(
-            board.cells[r][c],
-            CellState.ATTACK
+            board.cells[r + mul][c - 1].performCellState(board.cells[r][c], CellState.ATTACK)
+        if (c != 7 && (board.cells[r + mul][c + 1].piece != null ||
+                    board.cells[r][c + 1].piece is Pawn && board.history.isNotEmpty() && board.history.last().piece === board.cells[r][c + 1].piece)
         )
+            board.cells[r + mul][c + 1].performCellState(board.cells[r][c], CellState.ATTACK)
     }
 }

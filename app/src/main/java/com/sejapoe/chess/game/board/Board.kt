@@ -8,9 +8,12 @@ import com.sejapoe.chess.game.board.cell.ICell
 import com.sejapoe.chess.game.piece.*
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
+import com.sejapoe.chess.game.piece.core.PieceMovement
 import com.sejapoe.chess.game.theme.Theme
 
 class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
+    override val history: MutableList<PieceMovement> = mutableListOf()
+
     // Initialize cells, assign for each cell it's imageView
     override val cells: MutableList<MutableList<ICell>> = MutableList(8) {
         MutableList(8) { jt ->
@@ -78,7 +81,7 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
 
         when (destinationCell.state) {
             CellState.MOVE -> move(fixedSelectedCell, destinationCell)
-            CellState.ATTACK -> move(fixedSelectedCell, destinationCell) // TODO: Make distinct attack logic
+            CellState.ATTACK -> attack(fixedSelectedCell, destinationCell)
             CellState.CAST -> cast(fixedSelectedCell, destinationCell)
             else -> {
                 selectedCell = null
@@ -99,6 +102,17 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
         )
     }
 
+    private fun attack(sourceCell: ICell, destinationCell: ICell) {
+        if (destinationCell.piece == null) {
+            val cell = cells[sourceCell.row][destinationCell.column]
+            if (cell.piece is Pawn) {// should be alwqays true
+                // TODO: log killed pawn
+                cell.piece = null
+            }
+        } // else TODO: log killed piece
+        move(sourceCell, destinationCell)
+    }
+
     private fun move(sourceCell: ICell, destinationCell: ICell) {
         destinationCell.piece = when (sourceCell.piece) {
             is CastingParticipant -> {
@@ -115,6 +129,15 @@ class Board(activity: Activity, val theme: Theme, val game: Game) : IBoard {
             else -> sourceCell.piece
         }
         sourceCell.piece = null
+        history.add(
+            PieceMovement(
+                destinationCell.piece!!,
+                sourceCell.column,
+                sourceCell.row,
+                destinationCell.column,
+                destinationCell.row
+            )
+        )
     }
 
     private fun forEach(lambda: (value: ICell) -> Unit) = cells.flatten().forEach(lambda)
