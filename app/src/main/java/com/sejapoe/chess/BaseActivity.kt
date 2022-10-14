@@ -3,6 +3,7 @@ package com.sejapoe.chess
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
+import com.sejapoe.chess.game.theme.Theme
 import java.util.*
 
 open class BaseActivity : AppCompatActivity() {
@@ -23,5 +24,6 @@ open class BaseActivity : AppCompatActivity() {
     companion object {
         lateinit var settingsEditor: SharedPreferences.Editor
         lateinit var dLocale: Locale
+        lateinit var dTheme: Theme
     }
 }

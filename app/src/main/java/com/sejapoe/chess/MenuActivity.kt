@@ -3,7 +3,6 @@ package com.sejapoe.chess
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import com.sejapoe.chess.game.theme.Theme
 import java.util.*
 
 
@@ -14,7 +13,6 @@ class MenuActivity : BaseActivity() {
 
         findViewById<Button>(R.id.startBtn).setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("theme", Theme.DEFAULT)
             startActivity(intent)
         }
 
