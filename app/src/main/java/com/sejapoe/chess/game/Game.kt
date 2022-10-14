@@ -5,6 +5,7 @@ import android.app.Activity
 import android.widget.TextView
 import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.Board
+import com.sejapoe.chess.game.board.BoardState
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
@@ -23,10 +24,11 @@ class Game(activity: Activity, theme: Theme) {
     init {
         for (cell in board.cells.flatten()) {
             (cell as Cell).setOnClickListener {
-                if (board.tryMoveSelectedTo(it)) {
-//                    turn = !turn
-                } else if (it.piece != null) {
+                if (!board.tryMoveSelectedTo(it) && it.piece != null) {
                     if (it.piece!!.color == turn) board.selectedCell = it
+                }
+                if (board.state == BoardState.CHECKMATE) {
+                    activity.finish()
                 }
             }
         }

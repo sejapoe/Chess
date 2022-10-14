@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.sejapoe.chess.game.Game
 import com.sejapoe.chess.game.theme.Theme
 
-class MainActivity : AppCompatActivity() {
+class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
