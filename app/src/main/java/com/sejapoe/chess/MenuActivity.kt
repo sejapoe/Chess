@@ -3,10 +3,11 @@ package com.sejapoe.chess
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import com.sejapoe.chess.game.theme.Theme
+import java.util.*
 
-class MenuActivity : AppCompatActivity() {
+
+class MenuActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_menu)
@@ -16,5 +17,22 @@ class MenuActivity : AppCompatActivity() {
             intent.putExtra("theme", Theme.DEFAULT)
             startActivity(intent)
         }
+
+        findViewById<Button>(R.id.enBtn).setOnClickListener {
+            updateLanguage(Locale.ENGLISH)
+        }
+
+        findViewById<Button>(R.id.ruBtn).setOnClickListener {
+            updateLanguage(Locale("ru"))
+        }
+    }
+
+    private fun updateLanguage(locale: Locale) {
+        dLocale = locale
+        settingsEditor.putString("language", locale.language)
+        settingsEditor.commit()
+        val intent = Intent(applicationContext, MenuActivity::class.java)
+        startActivity(intent)
+        finishAffinity()
     }
 }

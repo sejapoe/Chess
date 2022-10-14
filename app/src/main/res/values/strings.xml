@@ -3,4 +3,6 @@
     <string name="none">none</string>
     <string name="start">Start</string>
     <string name="reset">Reset</string>
+    <string name="en">EN</string>
+    <string name="ru">RU</string>
 </resources>

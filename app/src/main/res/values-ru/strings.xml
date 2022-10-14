@@ -4,4 +4,6 @@
     <string name="none">none</string>
     <string name="start">Начать</string>
     <string name="reset">Сбросить</string>
+    <string name="en">Англ</string>
+    <string name="ru">Рус</string>
 </resources>
