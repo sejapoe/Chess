@@ -5,4 +5,7 @@
     <string name="reset">Reset</string>
     <string name="en">EN</string>
     <string name="ru">RU</string>
+    <string name="next">next</string>
+    <string name="prev">prev</string>
+    <string name="themeChoose">Choose Theme</string>
 </resources>

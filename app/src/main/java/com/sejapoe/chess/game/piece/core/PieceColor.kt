@@ -1,11 +1,16 @@
 package com.sejapoe.chess.game.piece.core
 
-import android.graphics.Color
+import com.sejapoe.chess.game.theme.ThemeColors
 
-enum class PieceColor(private val color: Int) {
-    BLACK(Color.BLACK), WHITE(Color.WHITE);
+enum class PieceColor() {
+    BLACK() {
+        override fun toInt(colors: ThemeColors) = colors.blackPiece
+    },
+    WHITE() {
+        override fun toInt(colors: ThemeColors): Int = colors.whitePiece
+    };
 
-    fun toInt() = color
+    abstract fun toInt(colors: ThemeColors): Int
     operator fun not(): PieceColor =
         if (this == BLACK) WHITE else BLACK
 }

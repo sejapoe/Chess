@@ -2,10 +2,10 @@ package com.sejapoe.chess.game.board.cell
 
 import android.widget.ImageView
 import com.sejapoe.chess.R
-import com.sejapoe.chess.game.board.Board
+import com.sejapoe.chess.game.board.DisplayBoard
 import com.sejapoe.chess.game.piece.Piece
 
-class Cell(private val imageView: ImageView, override val board: Board, textId: String) : ICell {
+class Cell(private val imageView: ImageView, override val board: DisplayBoard, textId: String) : ICell {
     private val img
         get() = imageView
     override val column = textId[0] - 'a'
@@ -30,7 +30,7 @@ class Cell(private val imageView: ImageView, override val board: Board, textId: 
                 null -> img.setImageResource(R.drawable.cell)
                 else -> {
                     img.setImageResource(value.imageResource)
-                    img.setColorFilter(value.color.toInt())
+                    img.setColorFilter(value.color.toInt(board.theme.colors))
                 }
             }
             field = value
