@@ -9,6 +9,11 @@ import com.sejapoe.chess.game.board.BoardState
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import kotlinx.coroutines.runBlocking
+import java.util.logging.Logger
 
 class Game(activity: Activity, theme: Theme) {
     val board = Board(activity, theme, this)
@@ -24,7 +29,15 @@ class Game(activity: Activity, theme: Theme) {
     init {
         for (cell in board.cells.flatten()) {
             (cell as Cell).setOnClickListener {
-                if (!board.tryMoveSelectedTo(it) && it.piece != null) {
+                if (board.tryMoveSelectedTo(it)) {
+                    runBlocking {
+                        try {
+                            HttpClient().request("http://192.168.0.15:8080/move").run {}
+                        } catch (e: Exception) {
+                            Logger.getGlobal().info("Server not found")
+                        }
+                    }
+                } else if (it.piece != null) {
                     if (it.piece!!.color == turn) board.selectedCell = it
                 }
                 if (board.state == BoardState.CHECKMATE) {
