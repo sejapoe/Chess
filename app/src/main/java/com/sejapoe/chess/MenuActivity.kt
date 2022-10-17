@@ -16,6 +16,11 @@ class MenuActivity : BaseActivity() {
             startActivity(intent)
         }
 
+        findViewById<Button>(R.id.startOnlineBtn).setOnClickListener {
+            val intent = Intent(this, QueueActivity::class.java)
+            startActivity(intent)
+        }
+
         findViewById<Button>(R.id.themeChooseBtn).setOnClickListener {
             val intent = Intent(this, ThemeChooseActivity::class.java)
             startActivity(intent)

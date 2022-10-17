@@ -8,4 +8,6 @@ data class PieceMovement(
     val rowSource: Int,
     val columnDest: Int,
     val rowDest: Int,
-)
+) {
+    fun toData() = PieceMovementData(columnSource, rowSource, columnDest, rowDest)
+}

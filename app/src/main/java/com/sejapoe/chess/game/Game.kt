@@ -12,13 +12,11 @@ import com.sejapoe.chess.game.theme.Theme
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.runBlocking
-import java.util.logging.Logger
 
-class Game(activity: Activity, theme: Theme) {
+class Game(private val activity: Activity, theme: Theme) : IGame {
     val board = Board(activity, theme, this)
-    private val turnText: TextView = activity.findViewById<TextView>(R.id.turnText)
-    var turn = PieceColor.WHITE
+    private val turnText: TextView = activity.findViewById(R.id.turnText)
+    override var turn = PieceColor.WHITE
         @SuppressLint("SetTextI18n")
         set(value) {
             turnText.text = "${value.name} ${board.state.name}"
@@ -28,22 +26,16 @@ class Game(activity: Activity, theme: Theme) {
     // Add interaction logic
     init {
         for (cell in board.cells.flatten()) {
-            (cell as Cell).setOnClickListener {
-                if (board.tryMoveSelectedTo(it)) {
-                    runBlocking {
-                        try {
-                            HttpClient().request("http://192.168.0.15:8080/move").run {}
-                        } catch (e: Exception) {
-                            Logger.getGlobal().info("Server not found")
-                        }
-                    }
-                } else if (it.piece != null) {
-                    if (it.piece!!.color == turn) board.selectedCell = it
-                }
-                if (board.state == BoardState.CHECKMATE) {
-                    activity.finish()
-                }
-            }
+            (cell as Cell).setOnClickListener(::activateCell)
+        }
+    }
+
+    private fun activateCell(it: Cell) {
+        if (!board.tryMoveSelectedTo(it) && it.piece != null) {
+            if (it.piece!!.color == turn) board.selectedCell = it
+        }
+        if (board.state == BoardState.CHECKMATE) {
+            activity.finish()
         }
     }
 

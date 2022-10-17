@@ -1,7 +1,7 @@
 package com.sejapoe.chess.game.board
 
 import android.app.Activity
-import com.sejapoe.chess.game.Game
+import com.sejapoe.chess.game.IGame
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.board.cell.ICell
@@ -13,7 +13,7 @@ import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.piece.core.PieceMovement
 import com.sejapoe.chess.game.theme.Theme
 
-class Board(activity: Activity, theme: Theme, val game: Game) : DisplayBoard(activity, theme) {
+class Board(activity: Activity, theme: Theme, val game: IGame) : DisplayBoard(activity, theme) {
     override val history: MutableList<PieceMovement> = mutableListOf()
 
     override var state: BoardState = BoardState.DEFAULT
@@ -96,20 +96,20 @@ class Board(activity: Activity, theme: Theme, val game: Game) : DisplayBoard(act
             val cell = cells[sourceCell.row][destinationCell.column]
             if (cell.piece is Pawn) {// should be alwqays true
                 // TODO: log killed pawn
-                cell.piece = null
+                move(cell, null)
             }
         } // else TODO: log killed piece
         move(sourceCell, destinationCell)
     }
 
-    private fun move(sourceCell: ICell, destinationCell: ICell) {
-        destinationCell.piece = when (sourceCell.piece) {
+    private fun move(sourceCell: ICell, destinationCell: ICell?) {
+        destinationCell?.piece = when (sourceCell.piece) {
             is CastingParticipant -> {
                 (sourceCell.piece as CastingParticipant).wasMoved = true
                 sourceCell.piece
             }
 
-            is Pawn -> if (destinationCell.row == if (sourceCell.piece!!.color == PieceColor.WHITE) 7 else 0) {
+            is Pawn -> if (destinationCell?.row == if (sourceCell.piece!!.color == PieceColor.WHITE) 7 else 0) {
                 Queen(sourceCell.piece!!.color, theme.resources.queen)
             } else {
                 sourceCell.piece
@@ -117,16 +117,16 @@ class Board(activity: Activity, theme: Theme, val game: Game) : DisplayBoard(act
 
             else -> sourceCell.piece
         }
-        sourceCell.piece = null
         history.add(
             PieceMovement(
-                destinationCell.piece!!,
+                sourceCell.piece!!,
                 sourceCell.column,
                 sourceCell.row,
-                destinationCell.column,
-                destinationCell.row
+                destinationCell?.column ?: -1,
+                destinationCell?.row ?: -1
             )
         )
+        sourceCell.piece = null
     }
 
     private fun forEach(lambda: (value: ICell) -> Unit) = cells.flatten().forEach(lambda)

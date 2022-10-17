@@ -18,6 +18,10 @@
         <activity
                 android:name=".ThemeChooseActivity"
                 android:exported="false"/>
+        <activity android:name=".QueueActivity"
+                  android:exported="false"/>
+        <activity android:name=".OnlineGameActivity"
+                  android:exported="false"/>
         <activity
                 android:name=".GameActivity"
                 android:exported="false">
