@@ -20,4 +20,8 @@ class App : Application() {
                 Theme(ThemeColors.valueOf(strings[0]), ThemeResources.valueOf(strings[1]))
             } ?: Theme.DEFAULT
     }
+    
+    companion object {
+        const val HOST = "http://192.168.0.15:8080"
+    }
 }

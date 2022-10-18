@@ -8,13 +8,13 @@ import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.piece.core.PieceMovement
 import com.sejapoe.chess.game.theme.Theme
 
-open class DisplayBoard(activity: Activity, val theme: Theme) : IBoard {
+open class DisplayBoard(activity: Activity, val theme: Theme, isReversed: Boolean = false) : IBoard {
     override var state = BoardState.DEFAULT
 
     // Initialize cells, assign for each cell it's imageView
     override val cells: MutableList<MutableList<ICell>> = MutableList(8) {
         MutableList(8) { jt ->
-            val textId = "${'a' + jt}${it + 1}"
+            val textId = if (isReversed) "${'a' + jt}${it + 1}" else "${'a' + jt}${8 - it}"
             val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
             Cell(activity.findViewById(id), this, textId)
         }
@@ -23,9 +23,13 @@ open class DisplayBoard(activity: Activity, val theme: Theme) : IBoard {
     override val history: MutableList<PieceMovement> = mutableListOf()
 
     open fun resetSetup() {
+        fillCells(DisplayBoard::getDefaultPieceFor)
+    }
+
+    fun fillCells(function: (Int, Int, Theme) -> Piece?) {
         cells.forEachIndexed { i, row ->
             row.forEachIndexed { j, cell ->
-                cell.piece = getDefaultPieceFor(i, j, theme)
+                cell.piece = function(i, j, theme)
             }
         }
     }

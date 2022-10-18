@@ -13,7 +13,8 @@ import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.piece.core.PieceMovement
 import com.sejapoe.chess.game.theme.Theme
 
-class Board(activity: Activity, theme: Theme, val game: IGame) : DisplayBoard(activity, theme) {
+class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boolean = false) :
+    DisplayBoard(activity, theme, isReversed) {
     override val history: MutableList<PieceMovement> = mutableListOf()
 
     override var state: BoardState = BoardState.DEFAULT
@@ -40,7 +41,7 @@ class Board(activity: Activity, theme: Theme, val game: IGame) : DisplayBoard(ac
         game.turn = PieceColor.WHITE
     }
 
-    private fun performTurn() {
+    fun performTurn() {
         this.state = BoardState.DEFAULT
         cells.flatten().forEach { it.resetPossibleTurns() }
         cells.flatten().filter { it.piece?.color == game.turn }.forEach {

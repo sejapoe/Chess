@@ -10,9 +10,13 @@ class OnlineGameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        if (savedInstanceState != null) {
-            val game = OnlineGame(this, dTheme, savedInstanceState.getLong("id"), PieceColor.WHITE)
-
+        if (intent.extras != null) {
+            val game = OnlineGame(
+                this,
+                dTheme,
+                intent.extras?.getLong("id") ?: -1,
+                (intent.extras?.getSerializable("color") as? PieceColor) ?: PieceColor.WHITE
+            )
             findViewById<Button>(R.id.resetButton).setOnClickListener {
                 game.restart()
             }

@@ -2,11 +2,14 @@ package com.sejapoe.chess.game
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.os.Looper
 import android.widget.TextView
+import com.sejapoe.chess.App
 import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.board.BoardState
 import com.sejapoe.chess.game.board.cell.Cell
+import com.sejapoe.chess.game.multiplayer.BoardData
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
 import io.ktor.client.*
@@ -19,6 +22,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -29,12 +33,14 @@ class OnlineGame(
     private val localPlayerColor: PieceColor,
 ) :
     IGame {
-    val board = Board(activity, theme, this)
+    private var turnCount = 0
+    val board = Board(activity, theme, this, localPlayerColor == PieceColor.BLACK)
     private val turnText: TextView = activity.findViewById(R.id.turnText)
     override var turn = PieceColor.WHITE
         @SuppressLint("SetTextI18n")
         set(value) {
-            turnText.text = "${value.name} ${board.state.name}"
+            if (Looper.getMainLooper() == Looper.myLooper())
+                turnText.text = "YOU = $localPlayerColor | ${value.name} ${board.state.name}"
             field = value
         }
     private var moves = 0
@@ -51,6 +57,27 @@ class OnlineGame(
     init {
         for (cell in board.cells.flatten()) {
             (cell as Cell).setOnClickListener(::activateCell)
+        }
+        httpClient.launch {
+            while (true) {
+                delay(500)
+                httpClient.request {
+                    url("${App.HOST}/game/$id")
+                }.run {
+                    // TODO: 404 check
+                    val data: BoardData = body()
+                    if (data.turnCount != turnCount) {
+                        board.fillCells { i, j, theme ->
+                            data.cells[i][j]?.let {
+                                return@let it.type(it.color, theme)
+                            }
+                        }
+                        turnCount = data.turnCount
+                        board.performTurn()
+                        turn = data.turn
+                    }
+                }
+            }
         }
     }
 
@@ -74,7 +101,7 @@ class OnlineGame(
             while (moves < board.history.size) {
                 httpClient.request {
                     method = HttpMethod.Post
-                    url("http://192.168.0.15:8080/game/$id/move")
+                    url("${App.HOST}/game/$id/move")
                     contentType(ContentType.Application.Json)
                     setBody(board.history[moves++].toData())
                 }.run {

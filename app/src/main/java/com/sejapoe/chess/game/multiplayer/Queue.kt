@@ -6,6 +6,7 @@ import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.widget.ProgressBar
+import com.sejapoe.chess.App
 import com.sejapoe.chess.OnlineGameActivity
 import com.sejapoe.chess.QueueActivity
 import com.sejapoe.chess.R
@@ -29,14 +30,13 @@ class Queue(activity: Activity) {
         }
     }
     var id: Long = -1L
-    var gameId: Long = -1L
 
     init {
         CoroutineScope(Dispatchers.Default).launch {
             while (id == -1L) {
                 try {
                     httpClient.request {
-                        url("http://192.168.0.15:8080/registerMeToQueue")
+                        url("${App.HOST}/registerMeToQueue")
                     }.run {
                         id = body<User>().id
                     }
@@ -49,26 +49,25 @@ class Queue(activity: Activity) {
                 delay(1000)
                 try {
                     httpClient.request {
-                        url("http://192.168.0.15:8080/matchmakingStatus/$id")
+                        url("${App.HOST}/matchmakingStatus/$id")
                     }.run {
                         // TODO: add 404 check
                         when (status) {
                             HttpStatusCode.OK -> setSpinnerColor(Color.GREEN)
                             HttpStatusCode.Created -> {
                                 id = -1L
-                                gameId = body()
+                                val gameData: GameCreatingData = body()
+                                if (activity is QueueActivity) {
+                                    val intent = Intent(activity, OnlineGameActivity::class.java)
+                                    intent.putExtra("id", gameData.id)
+                                    intent.putExtra("color", gameData.yourColor)
+                                    activity.startActivity(intent)
+                                }
                             }
                         }
                     }
                 } catch (e: Exception) {
                     setSpinnerColor(Color.RED)
-                }
-            }
-            if (gameId != -1L) {
-                if (activity is QueueActivity) {
-                    val intent = Intent(activity, OnlineGameActivity::class.java)
-                    intent.putExtra("id", gameId)
-                    activity.startActivity(intent)
                 }
             }
             activity.finish()
