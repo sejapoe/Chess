@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.BlendMode
 import android.graphics.BlendModeColorFilter
 import android.graphics.Color
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.widget.ProgressBar
 import com.sejapoe.chess.App
 import com.sejapoe.chess.OnlineGameActivity
@@ -74,6 +76,7 @@ class Queue(activity: Activity) {
     }
 
     private fun setSpinnerColor(color: Int) {
-        spinner.currentDrawable?.colorFilter = BlendModeColorFilter(color, BlendMode.SRC_ATOP)
+        if (VERSION.SDK_INT >= VERSION_CODES.Q) spinner.currentDrawable?.colorFilter =
+            BlendModeColorFilter(color, BlendMode.SRC_ATOP)
     }
 }
