@@ -14,8 +14,12 @@ open class DisplayBoard(activity: Activity, val theme: Theme, isReversed: Boolea
     // Initialize cells, assign for each cell it's imageView
     override val cells: MutableList<MutableList<ICell>> = MutableList(8) {
         MutableList(8) { jt ->
-            val textId = if (isReversed) "${'a' + jt}${it + 1}" else "${'a' + jt}${8 - it}"
-            val id = activity.resources.getIdentifier(textId, "id", activity.packageName)
+            val textId = "${'a' + jt}${it + 1}"
+            val id = activity.resources.getIdentifier(
+                if (isReversed) "${'a' + (7 - jt)}${8 - it}" else textId,
+                "id",
+                activity.packageName
+            )
             Cell(activity.findViewById(id), this, textId)
         }
     }
