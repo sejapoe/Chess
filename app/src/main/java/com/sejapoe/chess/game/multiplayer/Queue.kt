@@ -12,7 +12,6 @@ import com.sejapoe.chess.QueueActivity
 import com.sejapoe.chess.R
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 
 class Queue(activity: Activity) {
     val spinner: ProgressBar = activity.findViewById(R.id.queueSpinner)
-    private val httpClient = HttpClient(CIO) {
+    private val httpClient = HttpClient() {
         install(ContentNegotiation) {
             json()
         }

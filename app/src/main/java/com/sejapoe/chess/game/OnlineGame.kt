@@ -44,7 +44,7 @@ class OnlineGame(
             field = value
         }
     private var moves = 0
-    private val httpClient = HttpClient(CIO) {
+    private val httpClient = HttpClient() {
         install(ContentNegotiation) {
             json(Json {
                 prettyPrint = true
