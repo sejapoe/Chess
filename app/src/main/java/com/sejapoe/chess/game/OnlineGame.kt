@@ -11,6 +11,7 @@ import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.board.BoardState
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.turn.Turn
+import com.sejapoe.chess.game.multiplayer.IServerListener
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
 import io.ktor.client.*
@@ -21,10 +22,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class OnlineGame(
     private val activity: Activity,
@@ -32,7 +30,7 @@ class OnlineGame(
     private val id: Long,
     private val localPlayerColor: PieceColor,
 ) :
-    IGame {
+    IGame, IServerListener {
     val board = Board(activity, theme, this, localPlayerColor == PieceColor.BLACK)
     private val turnText: TextView = activity.findViewById(R.id.turnText)
     override var turn = PieceColor.WHITE
@@ -52,12 +50,14 @@ class OnlineGame(
         activity.resources.getIdentifier("beep", "raw", activity.packageName)
     )
 
+    override lateinit var job: Job
+
     // Add interaction logic
     init {
         for (cell in board.cells.flatten()) {
             (cell as Cell).setOnClickListener(::activateCell)
         }
-        httpClient.launch {
+        job = httpClient.launch {
             while (true) {
                 delay(500)
                 httpClient.request {

@@ -18,12 +18,9 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class Queue(activity: Activity) {
+class Queue(activity: Activity) : IServerListener {
     val spinner: ProgressBar = activity.findViewById(R.id.queueSpinner)
     private val httpClient = HttpClient() {
         install(ContentNegotiation) {
@@ -32,8 +29,10 @@ class Queue(activity: Activity) {
     }
     var id: Long = -1L
 
+    override lateinit var job: Job
+
     init {
-        CoroutineScope(Dispatchers.Default).launch {
+        job = CoroutineScope(Dispatchers.Default).launch {
             while (id == -1L) {
                 try {
                     httpClient.request {
