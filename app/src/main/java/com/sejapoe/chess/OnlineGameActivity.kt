@@ -1,7 +1,6 @@
 package com.sejapoe.chess
 
 import android.os.Bundle
-import android.widget.Button
 import com.sejapoe.chess.game.OnlineGame
 import com.sejapoe.chess.game.piece.core.PieceColor
 
@@ -17,9 +16,6 @@ class OnlineGameActivity : BaseActivity() {
                 intent.extras?.getLong("id") ?: -1,
                 (intent.extras?.getSerializable("color") as? PieceColor) ?: PieceColor.WHITE
             )
-            findViewById<Button>(R.id.resetButton).setOnClickListener {
-                game.restart()
-            }
             game.restart()
         }
     }

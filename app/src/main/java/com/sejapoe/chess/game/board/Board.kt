@@ -5,17 +5,18 @@ import com.sejapoe.chess.game.IGame
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.board.cell.ICell
+import com.sejapoe.chess.game.board.turn.*
+import com.sejapoe.chess.game.multiplayer.PieceMovementData
 import com.sejapoe.chess.game.piece.King
 import com.sejapoe.chess.game.piece.Pawn
 import com.sejapoe.chess.game.piece.Queen
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
-import com.sejapoe.chess.game.piece.core.PieceMovement
 import com.sejapoe.chess.game.theme.Theme
 
 class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boolean = false) :
     DisplayBoard(activity, theme, isReversed) {
-    override val history: MutableList<PieceMovement> = mutableListOf()
+    override val history: MutableList<Turn> = mutableListOf()
 
     override var state: BoardState = BoardState.DEFAULT
 
@@ -71,7 +72,11 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
 
         when (destinationCell.state) {
             CellState.MOVE -> move(fixedSelectedCell, destinationCell)
-            CellState.ATTACK -> attack(fixedSelectedCell, destinationCell)
+            CellState.ATTACK -> {
+                if (destinationCell.piece == null) enPassant(fixedSelectedCell, destinationCell)
+                else attack(fixedSelectedCell, destinationCell)
+            }
+
             CellState.CAST -> cast(fixedSelectedCell, destinationCell)
             else -> {
                 selectedCell = null
@@ -83,27 +88,49 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
         return true
     }
 
+    fun move(sourceCell: ICell, destinationCell: ICell) {
+        doMove(sourceCell, destinationCell)
+        history.add(Move(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
+    }
+
+    fun attack(sourceCell: ICell, destinationCell: ICell) { // TODO: ??
+        doMove(sourceCell, destinationCell)
+        history.add(Attack(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
+    }
+
     private fun cast(kingCell: ICell, destinationCell: ICell) {
         val delta = if (kingCell.column > destinationCell.column) 1 else -1
-        move(kingCell, destinationCell)
-        move(
-            cells[destinationCell.row][destinationCell.column - delta], // Rook position
-            cells[destinationCell.row][destinationCell.column + delta] // Rook destination
+        doMove(kingCell, destinationCell)
+
+        val rookSource = cells[destinationCell.row][destinationCell.column - delta]
+        val rookDestination = cells[destinationCell.row][destinationCell.column + delta]
+        doMove(
+            rookSource,
+            rookDestination
+        )
+
+        history.add(
+            Cast(
+                game.turn,
+                PieceMovementData(kingCell, destinationCell),
+                PieceMovementData(rookSource, rookDestination),
+                history.size
+            )
         )
     }
 
-    private fun attack(sourceCell: ICell, destinationCell: ICell) {
-        if (destinationCell.piece == null) {
-            val cell = cells[sourceCell.row][destinationCell.column]
-            if (cell.piece is Pawn) {// should be alwqays true
-                // TODO: log killed pawn
-                move(cell, null)
-            }
-        } // else TODO: log killed piece
-        move(sourceCell, destinationCell)
+    fun enPassant(
+        sourceCell: ICell,
+        destinationCell: ICell,
+    ) {
+        val cell = cells[sourceCell.row][destinationCell.column]
+        // TODO: log killed pawn
+        doMove(cell, null)
+        doMove(sourceCell, destinationCell)
+        history.add(EnPassant(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
     }
 
-    private fun move(sourceCell: ICell, destinationCell: ICell?) {
+    fun doMove(sourceCell: ICell, destinationCell: ICell?) {
         destinationCell?.piece = when (sourceCell.piece) {
             is CastingParticipant -> {
                 (sourceCell.piece as CastingParticipant).wasMoved = true
@@ -118,15 +145,6 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
 
             else -> sourceCell.piece
         }
-        history.add(
-            PieceMovement(
-                sourceCell.piece!!,
-                sourceCell.column,
-                sourceCell.row,
-                destinationCell?.column ?: -1,
-                destinationCell?.row ?: -1
-            )
-        )
         sourceCell.piece = null
     }
 

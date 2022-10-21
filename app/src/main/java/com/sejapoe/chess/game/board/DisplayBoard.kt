@@ -3,9 +3,9 @@ package com.sejapoe.chess.game.board
 import android.app.Activity
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.cell.ICell
+import com.sejapoe.chess.game.board.turn.Turn
 import com.sejapoe.chess.game.piece.*
 import com.sejapoe.chess.game.piece.core.PieceColor
-import com.sejapoe.chess.game.piece.core.PieceMovement
 import com.sejapoe.chess.game.theme.Theme
 
 open class DisplayBoard(activity: Activity, val theme: Theme, isReversed: Boolean = false) : IBoard {
@@ -24,7 +24,7 @@ open class DisplayBoard(activity: Activity, val theme: Theme, isReversed: Boolea
         }
     }
 
-    override val history: MutableList<PieceMovement> = mutableListOf()
+    override val history: MutableList<Turn> = mutableListOf()
 
     open fun resetSetup() {
         fillCells(DisplayBoard::getDefaultPieceFor)

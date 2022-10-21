@@ -2,13 +2,13 @@ package com.sejapoe.chess.game.board
 
 import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.board.cell.ICell
+import com.sejapoe.chess.game.board.turn.Turn
 import com.sejapoe.chess.game.piece.King
-import com.sejapoe.chess.game.piece.core.PieceMovement
 
 interface IBoard {
     var state: BoardState
     val cells: MutableList<MutableList<ICell>>
-    val history: MutableList<PieceMovement>
+    val history: MutableList<Turn>
 
     fun checkForCheck() {
         if (cells.flatten().any {

@@ -2,6 +2,7 @@ package com.sejapoe.chess.game
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.media.MediaPlayer
 import android.os.Looper
 import android.widget.TextView
 import com.sejapoe.chess.App
@@ -9,7 +10,7 @@ import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.Board
 import com.sejapoe.chess.game.board.BoardState
 import com.sejapoe.chess.game.board.cell.Cell
-import com.sejapoe.chess.game.multiplayer.BoardData
+import com.sejapoe.chess.game.board.turn.Turn
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
 import io.ktor.client.*
@@ -24,7 +25,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 class OnlineGame(
     private val activity: Activity,
@@ -33,7 +33,6 @@ class OnlineGame(
     private val localPlayerColor: PieceColor,
 ) :
     IGame {
-    private var turnCount = 0
     val board = Board(activity, theme, this, localPlayerColor == PieceColor.BLACK)
     private val turnText: TextView = activity.findViewById(R.id.turnText)
     override var turn = PieceColor.WHITE
@@ -43,15 +42,15 @@ class OnlineGame(
                 turnText.text = "YOU = $localPlayerColor | ${value.name} ${board.state.name}"
             field = value
         }
-    private var moves = 0
     private val httpClient = HttpClient() {
         install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-            })
+            json()
         }
     }
+    private val player = MediaPlayer.create(
+        activity.applicationContext,
+        activity.resources.getIdentifier("beep", "raw", activity.packageName)
+    )
 
     // Add interaction logic
     init {
@@ -65,16 +64,19 @@ class OnlineGame(
                     url("${App.HOST}/game/$id")
                 }.run {
                     // TODO: 404 check
-                    val data: BoardData = body()
-                    if (data.turnCount != turnCount) {
-                        board.fillCells { i, j, theme ->
-                            data.cells[i][j]?.let {
-                                return@let it.type(it.color, theme)
-                            }
-                        }
-                        turnCount = data.turnCount
+                    val data = try {
+                        call.body<Turn>()
+                    } catch (e: Exception) {
+                        null
+                    }
+                    if (data != null
+                        && data.number == board.history.size
+                        && data.performer != localPlayerColor
+                        && turn != localPlayerColor
+                    ) {
+                        data.perform(board)
                         board.performTurn()
-                        turn = data.turn
+                        player.start()
                     }
                 }
             }
@@ -98,15 +100,11 @@ class OnlineGame(
 
     private fun sendMoves() {
         CoroutineScope(Dispatchers.Default).launch {
-            while (moves < board.history.size) {
-                httpClient.request {
-                    method = HttpMethod.Post
-                    url("${App.HOST}/game/$id/move")
-                    contentType(ContentType.Application.Json)
-                    setBody(board.history[moves++].toData())
-                }.run {
-                    println(status)
-                }
+            httpClient.request {
+                method = HttpMethod.Post
+                url("${App.HOST}/game/$id/move")
+                contentType(ContentType.Application.Json)
+                setBody(board.history.last())
             }
         }
     }
