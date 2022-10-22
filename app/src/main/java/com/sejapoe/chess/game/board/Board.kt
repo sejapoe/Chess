@@ -72,11 +72,8 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
 
         when (destinationCell.state) {
             CellState.MOVE -> move(fixedSelectedCell, destinationCell)
-            CellState.ATTACK -> {
-                if (destinationCell.piece == null) enPassant(fixedSelectedCell, destinationCell)
-                else attack(fixedSelectedCell, destinationCell)
-            }
-
+            CellState.ATTACK -> attack(fixedSelectedCell, destinationCell)
+            CellState.EN_PASSANT -> enPassant(fixedSelectedCell, destinationCell)
             CellState.CAST -> cast(fixedSelectedCell, destinationCell)
             else -> {
                 selectedCell = null

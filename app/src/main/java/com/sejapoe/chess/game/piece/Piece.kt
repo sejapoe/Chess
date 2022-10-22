@@ -14,7 +14,7 @@ sealed interface Piece {
 
     fun ICell.performCellState(source: ICell, cellState: CellState) {
         val cellState1 = when {
-            piece == null -> cellState
+            piece == null -> if (cellState == CellState.ATTACK) CellState.EN_PASSANT else cellState
             piece === this@Piece -> CellState.STAY
             piece!!.color == this@Piece.color -> CellState.NONE
             else -> CellState.ATTACK

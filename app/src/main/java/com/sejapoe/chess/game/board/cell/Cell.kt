@@ -16,7 +16,7 @@ class Cell(private val imageView: ImageView, override val board: DisplayBoard, t
             img.setBackgroundColor(
                 when (value) {
                     CellState.NONE -> color.mainColor
-                    CellState.MOVE, CellState.STAY, CellState.CAST, CellState.ATTACK -> color.selectionColor
+                    CellState.MOVE, CellState.STAY, CellState.CAST, CellState.ATTACK, CellState.EN_PASSANT -> color.selectionColor
                 }
             )
             field = value
