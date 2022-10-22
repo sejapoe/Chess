@@ -14,6 +14,7 @@ class EnPassant(
     override val number: Int,
 ) : Turn() {
     override fun perform(board: Board) {
+        super.perform(board)
         board.enPassant(
             board.cells[move.rowSource][move.columnSource],
             board.cells[move.rowDest][move.columnDest]

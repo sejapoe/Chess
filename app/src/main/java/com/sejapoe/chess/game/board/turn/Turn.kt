@@ -8,5 +8,8 @@ import kotlinx.serialization.Serializable
 sealed class Turn() {
     abstract val number: Int
     abstract val performer: PieceColor
-    abstract fun perform(board: Board)
+    var promotion: Promotion? = null
+    open fun perform(board: Board) {
+        promotion?.perform(board)
+    }
 }

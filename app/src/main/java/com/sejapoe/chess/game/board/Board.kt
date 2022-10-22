@@ -6,10 +6,11 @@ import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.cell.CellState
 import com.sejapoe.chess.game.board.cell.ICell
 import com.sejapoe.chess.game.board.turn.*
+import com.sejapoe.chess.game.multiplayer.PieceData
 import com.sejapoe.chess.game.multiplayer.PieceMovementData
+import com.sejapoe.chess.game.multiplayer.PieceType
 import com.sejapoe.chess.game.piece.King
 import com.sejapoe.chess.game.piece.Pawn
-import com.sejapoe.chess.game.piece.Queen
 import com.sejapoe.chess.game.piece.core.CastingParticipant
 import com.sejapoe.chess.game.piece.core.PieceColor
 import com.sejapoe.chess.game.theme.Theme
@@ -86,25 +87,19 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
     }
 
     fun move(sourceCell: ICell, destinationCell: ICell) {
-        doMove(sourceCell, destinationCell)
         history.add(Move(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
+        doMove(sourceCell, destinationCell)
     }
 
     fun attack(sourceCell: ICell, destinationCell: ICell) { // TODO: ??
-        doMove(sourceCell, destinationCell)
         history.add(Attack(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
+        doMove(sourceCell, destinationCell)
     }
 
     private fun cast(kingCell: ICell, destinationCell: ICell) {
         val delta = if (kingCell.column > destinationCell.column) 1 else -1
-        doMove(kingCell, destinationCell)
-
         val rookSource = cells[destinationCell.row][destinationCell.column - delta]
         val rookDestination = cells[destinationCell.row][destinationCell.column + delta]
-        doMove(
-            rookSource,
-            rookDestination
-        )
 
         history.add(
             Cast(
@@ -114,6 +109,9 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
                 history.size
             )
         )
+
+        doMove(kingCell, destinationCell)
+        doMove(rookSource, rookDestination)
     }
 
     fun enPassant(
@@ -121,10 +119,18 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
         destinationCell: ICell,
     ) {
         val cell = cells[sourceCell.row][destinationCell.column]
-        // TODO: log killed pawn
+        history.add(EnPassant(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
         doMove(cell, null)
         doMove(sourceCell, destinationCell)
-        history.add(EnPassant(game.turn, PieceMovementData(sourceCell, destinationCell), history.size))
+    }
+
+    private fun promotion(cell: ICell, pieceType: PieceType) {
+        cell.piece = pieceType.invoke(cell.piece!!.color, theme)
+        if (history.last().performer == game.turn) {
+            history.last().promotion = Promotion(
+                cell.row, cell.column, PieceData(pieceType, cell.piece!!.color)
+            )
+        }
     }
 
     fun doMove(sourceCell: ICell, destinationCell: ICell?) {
@@ -134,15 +140,12 @@ class Board(activity: Activity, theme: Theme, val game: IGame, isReversed: Boole
                 sourceCell.piece
             }
 
-            is Pawn -> if (destinationCell?.row == if (sourceCell.piece!!.color == PieceColor.WHITE) 7 else 0) {
-                Queen(sourceCell.piece!!.color, theme.resources.queen)
-            } else {
-                sourceCell.piece
-            }
-
             else -> sourceCell.piece
         }
         sourceCell.piece = null
+        if (destinationCell?.piece is Pawn && (destinationCell.row == 7 || destinationCell.row == 0)) {
+            promotion(destinationCell, PieceType.QUEEN)
+        }
     }
 
     private fun forEach(lambda: (value: ICell) -> Unit) = cells.flatten().forEach(lambda)

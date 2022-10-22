@@ -14,6 +14,7 @@ class Move(
     override val number: Int,
 ) : Turn() {
     override fun perform(board: Board) {
+        super.perform(board)
         board.move(
             board.cells[move.rowSource][move.columnSource],
             board.cells[move.rowDest][move.columnDest]

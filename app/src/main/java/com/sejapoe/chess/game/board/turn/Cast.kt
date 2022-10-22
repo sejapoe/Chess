@@ -15,6 +15,7 @@ class Cast(
     override val number: Int,
 ) : Turn() {
     override fun perform(board: Board) {
+        super.perform(board)
         board.doMove(
             board.cells[kingMove.rowSource][kingMove.columnSource],
             board.cells[kingMove.rowDest][kingMove.columnDest]
