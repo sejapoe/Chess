@@ -7,7 +7,7 @@ import com.sejapoe.chess.game.theme.Theme
 import java.util.*
 import java.util.logging.Logger
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
     init {
         updateConfig(this)
     }

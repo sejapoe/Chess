@@ -6,10 +6,13 @@ import android.widget.TextView
 import com.sejapoe.chess.game.board.DisplayBoard
 import com.sejapoe.chess.game.theme.Theme
 
-class ThemeChooseActivity : BaseActivity() {
+class ThemeChooseActivity : BaseActivity(), IBoardHolder {
+    override val boardIds: MutableList<MutableList<Int>> = MutableList(8) { MutableList(8) { 0 } }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_theme_choose)
+
+        DisplayBoard.generateBoard(this)
 
         val textColor: TextView = findViewById(R.id.themeColor)
         val textRes: TextView = findViewById(R.id.themeRes)

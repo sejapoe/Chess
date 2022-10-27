@@ -1,6 +1,10 @@
 package com.sejapoe.chess.game.board
 
 import android.app.Activity
+import android.widget.ImageView
+import android.widget.TableLayout
+import android.widget.TableRow
+import com.sejapoe.chess.R
 import com.sejapoe.chess.game.board.cell.Cell
 import com.sejapoe.chess.game.board.cell.ICell
 import com.sejapoe.chess.game.board.turn.Turn
@@ -12,19 +16,21 @@ open class DisplayBoard(activity: Activity, val theme: Theme, isReversed: Boolea
     override var state = BoardState.DEFAULT
 
     // Initialize cells, assign for each cell it's imageView
-    override val cells: MutableList<MutableList<ICell>> = MutableList(8) {
-        MutableList(8) { jt ->
-            val textId = "${'a' + jt}${it + 1}"
-            val id = activity.resources.getIdentifier(
-                if (isReversed) "${'a' + (7 - jt)}${8 - it}" else textId,
-                "id",
-                activity.packageName
-            )
-            Cell(activity.findViewById(id), this, textId)
-        }
-    }
+    final override val cells: MutableList<MutableList<ICell>>
 
     override val history: MutableList<Turn> = mutableListOf()
+
+    init {
+        val tableLayout = activity.findViewById<TableLayout>(R.id.boardHolder)
+        cells = MutableList(8) {
+            val rowId = if (isReversed) (7 - it) + 100 else it + 100
+            val row = tableLayout.findViewById<TableRow>(rowId)
+            MutableList(8) { jt ->
+                val id = if (isReversed) (7 - jt) + 10 else jt + 10
+                Cell(row.findViewById(id), this, "${'a' + jt}${it + 1}")
+            }
+        }
+    }
 
     open fun resetSetup() {
         fillCells(DisplayBoard::getDefaultPieceFor)
@@ -53,6 +59,27 @@ open class DisplayBoard(activity: Activity, val theme: Theme, isReversed: Boolea
 
                 1, 6 -> Pawn(color, theme.resources.pawn, r)
                 else -> null
+            }
+        }
+
+        fun generateBoard(activity: Activity) {
+            val tableLayout = activity.findViewById<TableLayout>(R.id.boardHolder)
+
+            val rowParams = TableLayout.LayoutParams(tableLayout.width, tableLayout.height / 8)
+
+            val cellParams =
+                TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
+
+            for (i in 8 downTo 1) {
+                val row = TableRow(activity)
+                row.id = i + 99
+                for (j in 'a'..'h') {
+                    val cell = ImageView(activity)
+                    cell.id = 10 + (j - 'a')
+                    cell.setImageResource(R.drawable.cell)
+                    row.addView(cell, cellParams)
+                }
+                tableLayout.addView(row, rowParams)
             }
         }
     }
