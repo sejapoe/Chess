@@ -1,8 +1,10 @@
-package com.sejapoe.chess
+package com.sejapoe.chess.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import com.sejapoe.chess.R
+import com.sejapoe.chess.ui.core.BaseActivity
 import java.util.*
 
 

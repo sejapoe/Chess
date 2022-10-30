@@ -9,9 +9,9 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.widget.ProgressBar
 import com.sejapoe.chess.App
-import com.sejapoe.chess.OnlineGameActivity
-import com.sejapoe.chess.QueueActivity
 import com.sejapoe.chess.R
+import com.sejapoe.chess.ui.OnlineGameActivity
+import com.sejapoe.chess.ui.QueueActivity
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*

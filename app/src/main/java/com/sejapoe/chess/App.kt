@@ -5,6 +5,7 @@ import android.content.Context
 import com.sejapoe.chess.game.theme.Theme
 import com.sejapoe.chess.game.theme.ThemeColors
 import com.sejapoe.chess.game.theme.ThemeResources
+import com.sejapoe.chess.ui.core.BaseActivity
 import java.util.*
 
 class App : Application() {

@@ -1,4 +1,4 @@
-package com.sejapoe.chess
+package com.sejapoe.chess.ui.core
 
 import android.content.SharedPreferences
 import android.content.res.Configuration

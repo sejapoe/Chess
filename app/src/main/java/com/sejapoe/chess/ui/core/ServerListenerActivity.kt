@@ -1,8 +1,8 @@
-package com.sejapoe.chess
+package com.sejapoe.chess.ui.core
 
 import com.sejapoe.chess.game.multiplayer.IServerListener
 
-open class ServerListenerActivity : BaseActivity() {
+abstract class ServerListenerActivity : BaseActivity() {
     protected var serverListener: IServerListener? = null
 
     override fun onDestroy() {

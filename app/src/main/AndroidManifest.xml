@@ -16,18 +16,18 @@
             android:theme="@style/Theme.Chess"
             android:networkSecurityConfig="@xml/network_security_config">
         <activity
-                android:name=".ThemeChooseActivity"
+                android:name=".ui.ThemeChooseActivity"
                 android:exported="false"/>
-        <activity android:name=".QueueActivity"
+        <activity android:name=".ui.QueueActivity"
                   android:exported="false"/>
-        <activity android:name=".OnlineGameActivity"
+        <activity android:name=".ui.OnlineGameActivity"
                   android:exported="false"/>
         <activity
-                android:name=".GameActivity"
+                android:name=".ui.GameActivity"
                 android:exported="false">
         </activity>
         <activity
-                android:name=".MenuActivity"
+                android:name=".ui.MenuActivity"
                 android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
