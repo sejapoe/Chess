@@ -11,6 +11,6 @@ class Bishop(override val color: PieceColor, override val imageResource: Int) : 
                 allowedDirections += i to j
             }
         }
-        super.selectAvailableCells(r, c, board, allowedDirections)
+        super.updatePossibleTurns(r, c, board, allowedDirections)
     }
 }

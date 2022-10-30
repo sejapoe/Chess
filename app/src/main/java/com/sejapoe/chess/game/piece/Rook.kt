@@ -13,6 +13,6 @@ class Rook(override val color: PieceColor, override val imageResource: Int) : Fa
             allowedDirections += i to 0
             allowedDirections += 0 to i
         }
-        super.selectAvailableCells(r, c, board, allowedDirections)
+        super.updatePossibleTurns(r, c, board, allowedDirections)
     }
 }

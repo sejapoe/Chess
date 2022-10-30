@@ -4,11 +4,11 @@ import com.sejapoe.chess.game.board.IBoard
 import com.sejapoe.chess.game.board.cell.CellState
 
 interface FarReachingPiece : Piece {
-    fun selectAvailableCells(
+    fun updatePossibleTurns(
         r: Int,
         c: Int,
         board: IBoard,
-        directions: Set<Pair<Int, Int>>
+        directions: Set<Pair<Int, Int>>,
     ) {
         val allowedDirections = directions.toHashSet()
         for (i in 1..7) {

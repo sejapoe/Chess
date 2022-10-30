@@ -12,6 +12,6 @@ class Queen(override val color: PieceColor, override val imageResource: Int) : F
                 allowedDirections += i to j
             }
         }
-        super.selectAvailableCells(r, c, board, allowedDirections)
+        super.updatePossibleTurns(r, c, board, allowedDirections)
     }
 }

@@ -21,7 +21,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
 
 class Queue(activity: Activity) : IServerListener {
-    val spinner: ProgressBar = activity.findViewById(R.id.queueSpinner)
+    private val spinner: ProgressBar = activity.findViewById(R.id.queueSpinner)
     private val httpClient = HttpClient() {
         install(ContentNegotiation) {
             json()
