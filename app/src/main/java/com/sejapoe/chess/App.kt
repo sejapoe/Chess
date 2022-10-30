@@ -22,6 +22,7 @@ class App : Application() {
     }
 
     companion object {
-        const val HOST = "https://chess-srv.herokuapp.com"
+        const val HOST = "https://chess-srv.herokuapp.com" // prod
+        //        const val HOST = "http://192.168.0.15:8080" // dev
     }
 }
